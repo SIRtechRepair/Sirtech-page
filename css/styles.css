@@ -200,3 +200,32 @@ details p{color:var(--muted);margin:10px 0 0}
 .hero-bg .stat{background:rgba(20,20,20,.65);border-color:rgba(255,255,255,.08);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
 .hero-bg .chip,.hero-bg .btn2{background:rgba(10,10,10,.4)}
 .hero-bg p.muted{color:#c9c9c9}
+
+/* Reseñas estilo Google */
+.res-wrap{display:grid;grid-template-columns:200px minmax(0,1fr);gap:24px;align-items:center}
+@media (max-width:760px){.res-wrap{grid-template-columns:1fr}}
+.res-sum{text-align:center}
+.res-ex{font-size:22px;letter-spacing:1px}
+.r-stars{color:#FBBC04;letter-spacing:2px;font-size:15px}
+.r-stars.big{font-size:24px;margin:4px 0}
+.res-g{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:10px;font-size:16px}
+.res-g i{font-size:24px}
+.res-vp{overflow:hidden}
+.res-track{display:flex;transition:transform .45s ease;--per:3}
+.rc{flex:0 0 calc(100% / var(--per));padding:0 7px}
+.rcard{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;height:100%;display:flex;flex-direction:column;gap:8px}
+.r-top{display:flex;align-items:center;gap:10px}
+.r-av{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;flex-shrink:0}
+.r-name{font-size:15px;font-weight:500;color:#fff}
+.r-date{font-size:12px;color:var(--muted)}
+.r-g{margin-left:auto;font-size:20px;color:var(--muted)}
+.r-text{font-size:14px;line-height:1.6;color:#cfcfcf;margin:0}
+.r-text.clamp{display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+.r-more{background:none;border:none;color:var(--g);font-size:13px;padding:0;cursor:pointer;font-family:var(--fb);align-self:flex-start}
+.res-nav{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:16px;padding:0 7px}
+.res-btn{width:38px;height:38px;border-radius:50%;border:1px solid #333;background:var(--card);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;transition:all .2s}
+.res-btn:hover{border-color:var(--g);color:var(--g)}
+.res-dots{display:flex;gap:6px}
+.res-dot{width:8px;height:8px;border-radius:99px;background:#333;border:none;padding:0;cursor:pointer;transition:all .3s}
+.res-dot.on{background:var(--g);width:20px}
+.res-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:2rem}
