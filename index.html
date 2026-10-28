@@ -66,7 +66,26 @@
     <section class="sec">
       <div class="container">
         <h2 class="sec-title" style="margin-bottom:2.5rem">Lo que dicen nuestros clientes</h2>
-        <div class="reviews" id="resenas"></div>
+        <div class="res-wrap">
+          <div class="res-sum reveal">
+            <div class="hd res-ex">EXCELENTE</div>
+            <div class="r-stars big">★★★★★</div>
+            <div class="muted">Basado en <b style="color:#fff"><span data-cfg="opiniones"></span> opiniones</b></div>
+            <div class="res-g"><i class="ti ti-brand-google"></i> Google</div>
+          </div>
+          <div class="res-car">
+            <div class="res-vp"><div class="res-track" id="resenas"></div></div>
+            <div class="res-nav">
+              <button class="res-btn" id="res-prev" aria-label="Anterior"><i class="ti ti-chevron-left"></i></button>
+              <div class="res-dots" id="res-dots"></div>
+              <button class="res-btn" id="res-next" aria-label="Siguiente"><i class="ti ti-chevron-right"></i></button>
+            </div>
+          </div>
+        </div>
+        <div class="res-actions">
+          <a class="btn2" id="res-ver" target="_blank" rel="noopener"><i class="ti ti-brand-google"></i> Ver las <span data-cfg="opiniones"></span> opiniones en Google</a>
+          <a class="btn" id="res-dejar" target="_blank" rel="noopener"><i class="ti ti-star"></i> Déjanos tu reseña</a>
+        </div>
       </div>
     </section>
 
