@@ -1,1 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tienda | SIR·TECH</title>
+  <meta name="description" content="Accesorios y repuestos para celulares y computadores. Pide por WhatsApp.">
+  <link rel="icon" href="img/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,500;0,700;1,700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="tienda">
+  <div id="header"></div>
 
+  <main>
+    <section class="page-head container">
+      <span class="chip">Accesorios y repuestos</span>
+      <h1>Tienda</h1>
+      <p>Arma tu pedido y envíalo por WhatsApp. Te confirmamos disponibilidad por chat.</p>
+    </section>
+
+    <section class="container" id="tienda" style="padding-bottom:4rem">
+      <div class="cat-chips" id="cat-chips"></div>
+      <div class="shop">
+        <div class="prods" id="prods"></div>
+        <aside class="card cart">
+          <h3><i class="ti ti-shopping-cart"></i> Tu carrito</h3>
+          <div id="cart-items"></div>
+          <div class="total"><span class="muted">Total</span><span class="price" id="cart-total">$0</span></div>
+          <button class="btn" id="cart-send" style="width:100%"><i class="ti ti-brand-whatsapp"></i> Enviar pedido por WhatsApp</button>
+          <button class="btn2 sm" id="cart-clear" style="width:100%;margin-top:8px">Vaciar carrito</button>
+          <div class="err" id="cart-err"></div>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <div id="footer"></div>
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
