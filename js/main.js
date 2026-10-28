@@ -263,12 +263,93 @@ function initResenas() {
   el.innerHTML = RESENAS.map(r => `<div class="card reveal"><div class="stars">★★★★★</div><p class="muted">${r.texto}</p><b>${r.nombre}</b></div>`).join('');
 }
 
-/* ---------- Animación al hacer scroll ---------- */
-function initReveal() {
-  const io = new IntersectionObserver(entries => entries.forEach(e => {
-    if (e.isIntersecting) { e.target.classList.add('show'); io.unobserve(e.target); }
-  }), { threshold: 0.12 });
-  $$('.reveal').forEach(el => io.observe(el));
+/* ---------- Reseñas estilo Google ---------- */
+function haceCuanto(fecha) {
+  const dias = Math.floor((Date.now() - new Date(fecha + 'T12:00:00')) / 86400000);
+  if (dias < 1) return 'hoy';
+  if (dias < 7) return `hace ${dias} día${dias > 1 ? 's' : ''}`;
+  const sem = Math.floor(dias / 7);
+  if (sem < 9) return `hace ${sem} semana${sem > 1 ? 's' : ''}`;
+  const mes = Math.floor(dias / 30);
+  if (mes < 12) return `hace ${mes} mes${mes > 1 ? 'es' : ''}`;
+  const an = Math.floor(dias / 365);
+  return `hace ${an} año${an > 1 ? 's' : ''}`;
+}
+
+function initResenas() {
+  const track = $('#resenas');
+  if (!track) return;
+  const vp = track.parentElement;
+  const colores = ['#1a73e8', '#e8710a', '#9334e6', '#188038', '#d93025', '#12b5cb'];
+  const inicial = n => (n.match(/[A-Za-zÁÉÍÓÚÑáéíóúñ0-9]/) || ['?'])[0].toUpperCase();
+
+  $('#res-ver').href = CONFIG.mapsLink;
+  $('#res-dejar').href = CONFIG.resenaLink || CONFIG.mapsLink;
+
+  track.innerHTML = RESENAS.map((r, i) => `
+    <div class="rc"><div class="rcard">
+      <div class="r-top">
+        <div class="r-av" style="background:${colores[i % colores.length]}">${inicial(r.nombre)}</div>
+        <div><div class="r-name">${r.nombre}</div><div class="r-date">${haceCuanto(r.fecha)}</div></div>
+        <i class="ti ti-brand-google r-g"></i>
+      </div>
+      <div class="r-stars">★★★★★</div>
+      <p class="r-text clamp">${r.texto}</p>
+      <button class="r-more" hidden>Leer más</button>
+    </div></div>`).join('');
+
+  let pg = 0, timer;
+  const per = () => vp.offsetWidth < 600 ? 1 : vp.offsetWidth < 900 ? 2 : 3;
+  const pages = () => Math.ceil(RESENAS.length / per());
+
+  function go(p) {
+    const n = pages();
+    pg = (p + n) % n;
+    track.style.setProperty('--per', per());
+    track.style.transform = `translateX(-${pg * 100}%)`;
+    $('#res-dots').innerHTML = Array.from({ length: n }, (_, i) =>
+      `<button class="res-dot ${i === pg ? 'on' : ''}" data-i="${i}" aria-label="Página ${i + 1}"></button>`).join('');
+  }
+
+  function checkMore() {
+    $$('.rcard', track).forEach(c => {
+      const p = $('.r-text', c), b = $('.r-more', c);
+      if (p.classList.contains('clamp')) b.hidden = p.scrollHeight <= p.clientHeight + 2;
+    });
+  }
+
+  const start = () => { clearInterval(timer); timer = setInterval(() => go(pg + 1), 6000); };
+  const stop = () => clearInterval(timer);
+
+  $('#res-prev').addEventListener('click', () => { go(pg - 1); start(); });
+  $('#res-next').addEventListener('click', () => { go(pg + 1); start(); });
+  $('#res-dots').addEventListener('click', e => {
+    const d = e.target.closest('.res-dot');
+    if (d) { go(+d.dataset.i); start(); }
+  });
+  track.addEventListener('click', e => {
+    const b = e.target.closest('.r-more');
+    if (!b) return;
+    const p = $('.r-text', b.parentElement);
+    const cerrado = p.classList.toggle('clamp');
+    b.textContent = cerrado ? 'Leer más' : 'Leer menos';
+    cerrado ? start() : stop();
+  });
+
+  /* Pausa al pasar el mouse y permite deslizar con el dedo en celular */
+  vp.addEventListener('mouseenter', stop);
+  vp.addEventListener('mouseleave', start);
+  let x0 = null;
+  vp.addEventListener('touchstart', e => { x0 = e.touches[0].clientX; stop(); }, { passive: true });
+  vp.addEventListener('touchend', e => {
+    if (x0 === null) return;
+    const dx = e.changedTouches[0].clientX - x0;
+    if (Math.abs(dx) > 40) go(dx < 0 ? pg + 1 : pg - 1);
+    x0 = null; start();
+  });
+
+  new ResizeObserver(() => { go(Math.min(pg, pages() - 1)); checkMore(); }).observe(vp);
+  go(0); checkMore(); start();
 }
 
 /* ---------- Arranque ---------- */
