@@ -1,14 +1,14 @@
 /* ===== Datos del negocio: edita aquí ===== */
 const CONFIG = {
-  whatsapp: '573124244589',          // 57 + número, sin espacios
+  whatsapp: '573124244589',
   telefono: '312 424 4589',
   direccion: 'Diagonal 1 #0-32, barrio Fundadores',
   ciudad: 'Arauca, Colombia',
   rating: '5,0',
   opiniones: 32,
   mapsLink: 'https://share.google/LV46rzTlUm6OCDbqz',
+  resenaLink: '',
   mapaEmbed: 'https://maps.google.com/maps?q=SIRtech%2C%20Diagonal%201%20%230-32%2C%20Fundadores%2C%20Arauca&z=17&output=embed',
-  // Horario en formato 24 h. 0 = domingo, 1 = lunes ... 6 = sábado. Para jornada partida: [[8,12],[14,18]]
   horario: { 0: [], 1: [[9,19]], 2: [[9,19]], 3: [[9,19]], 4: [[9,19]], 5: [[9,19]], 6: [[9,14]] },
   horarioTexto: ['Lun a vie 9:00 a.m. – 7:00 p.m.', 'Sábados 9:00 a.m. – 2:00 p.m.'],
   redes: { instagram: '#', tiktok: '#', facebook: '#' }
@@ -16,7 +16,7 @@ const CONFIG = {
 
 /* Un * al inicio marca el servicio como PRO */
 const SERVICIOS = [
-  { k:'mob', n:'Celulares', i:'ti-device-mobile', t:'Mismo día', d:'Pantallas, baterías, cámaras, audio y más, para todas las marcas.', s:[
+  { k:'mob', n:'Celulares', i:'ti-device-mobile', t:'Mismo día', d:'Pantallas, baterías, cámaras, audio y más. Especialistas en iPhone, atendemos todas las marcas.', s:[
     'Cambio de pantalla / display','Pegado e instalación de pantalla y marco','Cambio de batería','Reactivación de batería','Cambio de pin de carga','Limpieza de puertos','Cambio de tapa trasera / carcasa','Botones y pulsadores','Cambio de visor de cámara','Módulo de cámaras','Audio: auricular, parlante y micrófono','Desulfatación / control de humedad','Cambio de cristal táctil (glass)','*Trasplante de BMS / calibración batería iPhone','*Reprogramación True Tone y serial de pantalla','*Cristal de lente de cámara con láser','*Remanufactura de pantalla / re-glass OCA','*Reparación de Face ID','Flasheo y restauración del sistema']},
   { k:'pc', n:'Computadores', i:'ti-device-laptop', t:'1 a 3 días', d:'Portátiles y PC de escritorio: hardware, software y ensamble.', s:[
     'Mantenimiento preventivo y limpieza térmica','Reparación de bisagras y carcasa','Formateo e instalación de sistema operativo','Instalación y activación de licencias (Windows, Office)','Optimización y eliminación de virus','Instalación de disco SSD','Ampliación de memoria RAM','Cambio o reparación de teclado','Cambio de pantalla de laptop','Software especializado (Adobe, CAD)','Reparación y configuración de BIOS','Ensamble y montaje de equipos','*Térmico laptop gamer (metal líquido / PTM7950)','Cambio de DC jack de carga','*Reprogramación física de BIOS SPI','*Ensamble personalizado y cable management']},
@@ -44,9 +44,7 @@ const PRODUCTOS = [
   { n:'SSD 512 GB', c:'Almacenamiento', i:'ti-device-floppy', p:159000 }
 ];
 
-/* Cambia estas por reseñas reales de Google */
-const RESENAS = [
- /* Reseñas reales de Google. fecha = fecha aproximada en que la dejaron (año-mes-día) */
+/* Reseñas reales de Google. fecha = fecha aproximada en que la dejaron (año-mes-día) */
 const RESENAS = [
   { nombre:'Miguel Hernandez', fecha:'2026-04-08', texto:'Me gustó mucho el servicio explica muy bien antes de empezar el trabajo, no cobra la asesoria y dice la verdad si vale la pena reparar sus equipos o es mejor invertir en otro además también si la gente desea observa todo el proceso de ensamblaje o reparación puede hacerlo en el mismo taller' },
   { nombre:'Nikolas Herrera', fecha:'2026-08-26', texto:'Los mejores me ayudaron en un problema el cual no me solucionaron otros técnicos y ellos se demoraron muy poco para…' },
@@ -55,5 +53,4 @@ const RESENAS = [
   { nombre:'Alejandro Pulido Saravia', fecha:'2026-04-08', texto:'Excelente servicio, atención de calidad y resultados muy buenos.' },
   { nombre:'samuel cetina', fecha:'2026-02-18', texto:'Buena calidad en los mantenimientos y buenos precios eh reparado muchos equipos ahí y no ah habido inconvenientes' },
   { nombre:'Alfredo Vargas', fecha:'2026-02-18', texto:'Son exentes en lo que hacen..... Buenas atención.... Sus reparaciones son impecable!' }
-];
 ];
