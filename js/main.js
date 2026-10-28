@@ -256,13 +256,6 @@ function initContacto() {
   }));
 }
 
-/* ---------- Reseñas ---------- */
-function initResenas() {
-  const el = $('#resenas');
-  if (!el) return;
-  el.innerHTML = RESENAS.map(r => `<div class="card reveal"><div class="stars">★★★★★</div><p class="muted">${r.texto}</p><b>${r.nombre}</b></div>`).join('');
-}
-
 /* ---------- Reseñas estilo Google ---------- */
 function haceCuanto(fecha) {
   const dias = Math.floor((Date.now() - new Date(fecha + 'T12:00:00')) / 86400000);
@@ -278,13 +271,13 @@ function haceCuanto(fecha) {
 
 function initResenas() {
   const track = $('#resenas');
-  if (!track) return;
+  if (!track || typeof RESENAS === 'undefined') return;
   const vp = track.parentElement;
   const colores = ['#1a73e8', '#e8710a', '#9334e6', '#188038', '#d93025', '#12b5cb'];
   const inicial = n => (n.match(/[A-Za-zÁÉÍÓÚÑáéíóúñ0-9]/) || ['?'])[0].toUpperCase();
 
-  $('#res-ver').href = CONFIG.mapsLink;
-  $('#res-dejar').href = CONFIG.resenaLink || CONFIG.mapsLink;
+  if ($('#res-ver')) $('#res-ver').href = CONFIG.mapsLink;
+  if ($('#res-dejar')) $('#res-dejar').href = CONFIG.resenaLink || CONFIG.mapsLink;
 
   track.innerHTML = RESENAS.map((r, i) => `
     <div class="rc"><div class="rcard">
@@ -300,14 +293,15 @@ function initResenas() {
 
   let pg = 0, timer;
   const per = () => vp.offsetWidth < 600 ? 1 : vp.offsetWidth < 900 ? 2 : 3;
-  const pages = () => Math.ceil(RESENAS.length / per());
+  const pages = () => Math.max(1, Math.ceil(RESENAS.length / per()));
 
   function go(p) {
     const n = pages();
     pg = (p + n) % n;
     track.style.setProperty('--per', per());
     track.style.transform = `translateX(-${pg * 100}%)`;
-    $('#res-dots').innerHTML = Array.from({ length: n }, (_, i) =>
+    const dots = $('#res-dots');
+    if (dots) dots.innerHTML = Array.from({ length: n }, (_, i) =>
       `<button class="res-dot ${i === pg ? 'on' : ''}" data-i="${i}" aria-label="Página ${i + 1}"></button>`).join('');
   }
 
@@ -321,9 +315,9 @@ function initResenas() {
   const start = () => { clearInterval(timer); timer = setInterval(() => go(pg + 1), 6000); };
   const stop = () => clearInterval(timer);
 
-  $('#res-prev').addEventListener('click', () => { go(pg - 1); start(); });
-  $('#res-next').addEventListener('click', () => { go(pg + 1); start(); });
-  $('#res-dots').addEventListener('click', e => {
+  if ($('#res-prev')) $('#res-prev').addEventListener('click', () => { go(pg - 1); start(); });
+  if ($('#res-next')) $('#res-next').addEventListener('click', () => { go(pg + 1); start(); });
+  if ($('#res-dots')) $('#res-dots').addEventListener('click', e => {
     const d = e.target.closest('.res-dot');
     if (d) { go(+d.dataset.i); start(); }
   });
@@ -336,7 +330,6 @@ function initResenas() {
     cerrado ? start() : stop();
   });
 
-  /* Pausa al pasar el mouse y permite deslizar con el dedo en celular */
   vp.addEventListener('mouseenter', stop);
   vp.addEventListener('mouseleave', start);
   let x0 = null;
@@ -352,17 +345,23 @@ function initResenas() {
   go(0); checkMore(); start();
 }
 
-/* ---------- Arranque ---------- */
+/* ---------- Animación al hacer scroll ---------- */
+function initReveal() {
+  if (!('IntersectionObserver' in window)) { $$('.reveal').forEach(el => el.classList.add('show')); return; }
+  const io = new IntersectionObserver(entries => entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('show'); io.unobserve(e.target); }
+  }), { threshold: 0.12 });
+  $$('.reveal').forEach(el => io.observe(el));
+}
+
+/* ---------- Arranque (si una parte falla, las demás siguen funcionando) ---------- */
 document.addEventListener('DOMContentLoaded', () => {
-  renderHeader();
-  renderFooter();
-  updateBadge();
-  $$('[data-cfg]').forEach(el => el.textContent = CONFIG[el.dataset.cfg]);
-  renderUbicacion();
-  initSelector();
-  initServicios();
-  initTienda();
-  initContacto();
-  initResenas();
-  initReveal();
+  const pasos = [
+    renderHeader, renderFooter, updateBadge,
+    () => $$('[data-cfg]').forEach(el => el.textContent = CONFIG[el.dataset.cfg]),
+    renderUbicacion, initSelector, initServicios, initTienda, initContacto, initResenas, initReveal
+  ];
+  pasos.forEach(fn => {
+    try { fn(); } catch (err) { console.error('Error en', fn.name || 'paso', err); }
+  });
 });
