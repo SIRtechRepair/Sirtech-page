@@ -1,1 +1,287 @@
+const $ = (s, el = document) => el.querySelector(s);
+const $$ = (s, el = document) => [...el.querySelectorAll(s)];
+const nm = s => s.replace('*', '');
+const isPro = s => s.startsWith('*');
+const cop = n => '$' + Math.round(n).toLocaleString('es-CO');
+const wa = msg => window.open(`https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(msg)}`, '_blank');
 
+/* ---------- Encabezado ---------- */
+function renderHeader() {
+  const page = document.body.dataset.page;
+  const links = [
+    ['index.html', 'Inicio', 'inicio'],
+    ['servicios.html', 'Servicios', 'servicios'],
+    ['tienda.html', 'Tienda', 'tienda'],
+    ['garantia.html', 'Garantía y términos', 'garantia'],
+    ['contacto.html', 'Contacto', 'contacto']
+  ];
+  $('#header').outerHTML = `
+  <header class="site-header">
+    <nav class="container nav">
+      <a href="index.html" class="logo"><img src="img/logo.png" alt="Logo SIR·TECH"><span>SIR<b>·</b>TECH</span></a>
+      <button class="burger" aria-label="Abrir menú"><i class="ti ti-menu-2"></i></button>
+      <div class="menu">
+        ${links.map(([href, txt, id]) => `<a href="${href}" class="${id === page ? 'act' : ''}">${txt}</a>`).join('')}
+        <a href="tienda.html" class="cart-link" aria-label="Carrito"><i class="ti ti-shopping-cart"></i><span class="badge" id="badge"></span></a>
+      </div>
+    </nav>
+  </header>`;
+  $('.burger').addEventListener('click', () => {
+    const open = $('.menu').classList.toggle('open');
+    $('.burger i').className = open ? 'ti ti-x' : 'ti ti-menu-2';
+  });
+}
+
+/* ---------- Pie de página ---------- */
+function renderFooter() {
+  $('#footer').outerHTML = `
+  <section class="cta">
+    <div class="container">
+      <div><h3>¿Te dijeron que no tenía arreglo?</h3><div>Tráelo. Diagnóstico sin costo.</div></div>
+      <button class="btn" id="cta-wa"><i class="ti ti-brand-whatsapp"></i> Escribir ahora</button>
+    </div>
+  </section>
+  <footer class="site-footer">
+    <div class="container">
+      <div class="muted">© ${new Date().getFullYear()} SIR·TECH · ${CONFIG.direccion}, ${CONFIG.ciudad} · <a href="garantia.html">Términos y condiciones</a></div>
+      <div class="social">
+        <a href="${CONFIG.redes.instagram}" target="_blank" rel="noopener" aria-label="Instagram"><i class="ti ti-brand-instagram"></i></a>
+        <a href="${CONFIG.redes.tiktok}" target="_blank" rel="noopener" aria-label="TikTok"><i class="ti ti-brand-tiktok"></i></a>
+        <a href="${CONFIG.redes.facebook}" target="_blank" rel="noopener" aria-label="Facebook"><i class="ti ti-brand-facebook"></i></a>
+      </div>
+    </div>
+  </footer>`;
+  $('#cta-wa').addEventListener('click', () => wa('Hola SIR TECH, quiero hacer una consulta.'));
+}
+
+/* ---------- Carrito (se guarda entre páginas) ---------- */
+const CART_KEY = 'sirtech-carrito';
+const getCart = () => { try { return JSON.parse(localStorage.getItem(CART_KEY)) || {}; } catch { return {}; } };
+const saveCart = c => { localStorage.setItem(CART_KEY, JSON.stringify(c)); updateBadge(); };
+function updateBadge() {
+  const n = Object.values(getCart()).reduce((a, b) => a + b, 0);
+  const b = $('#badge');
+  if (b) b.textContent = n || '';
+}
+
+/* ---------- Abierto / cerrado (hora de Colombia) ---------- */
+function estaAbierto() {
+  const now = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Bogota' }));
+  const h = now.getHours() + now.getMinutes() / 60;
+  return (CONFIG.horario[now.getDay()] || []).some(([a, b]) => h >= a && h < b);
+}
+
+/* ---------- Ubicación ---------- */
+function renderUbicacion() {
+  const abierto = estaAbierto();
+  $$('.js-ubicacion').forEach(el => {
+    el.innerHTML = `
+    <div class="map reveal"><iframe src="${CONFIG.mapaEmbed}" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Mapa de SIR·TECH"></iframe></div>
+    <div class="info reveal">
+      <div class="card"><i class="ti ti-map-pin"></i><div><div class="hd">Dirección</div><div class="muted">${CONFIG.direccion}<br>${CONFIG.ciudad}</div></div></div>
+      <div class="card"><i class="ti ti-clock"></i><div style="flex:1"><div class="row"><div class="hd">Horario</div><span class="chip ${abierto ? '' : 'off'}">${abierto ? 'Abierto ahora' : 'Cerrado ahora'}</span></div><div class="muted">${CONFIG.horarioTexto.join('<br>')}</div></div></div>
+      <div class="card"><i class="ti ti-phone"></i><div><div class="hd">Teléfono y WhatsApp</div><div class="muted">${CONFIG.telefono}</div></div></div>
+      <div class="card"><i class="ti ti-star"></i><div style="flex:1"><div class="row"><div class="hd">${CONFIG.rating} en Google</div><span class="stars">★★★★★</span></div><div class="muted">${CONFIG.opiniones} opiniones</div></div></div>
+      <div class="actions">
+        <a class="btn" href="${CONFIG.mapsLink}" target="_blank" rel="noopener"><i class="ti ti-navigation"></i> Cómo llegar</a>
+        <a class="btn2" href="https://wa.me/${CONFIG.whatsapp}" target="_blank" rel="noopener"><i class="ti ti-brand-whatsapp"></i> WhatsApp</a>
+        <a class="btn2" href="tel:+57${CONFIG.telefono.replace(/\s/g, '')}"><i class="ti ti-phone-call"></i> Llamar</a>
+      </div>
+    </div>`;
+  });
+}
+
+/* ---------- Selector "¿Qué equipo necesitas reparar?" ---------- */
+function initSelector() {
+  const root = $('#selector');
+  if (!root) return;
+  const sel = new Set();
+  let cur = SERVICIOS[0].k;
+
+  root.innerHTML = `
+    <div class="search"><i class="ti ti-search"></i><input id="q" class="fld" placeholder="Busca tu falla: pantalla, batería, SSD, HDMI…" aria-label="Buscar servicio"></div>
+    <div class="devs" id="devs"></div>
+    <div class="panel">
+      <div class="panel-head" id="ph"></div>
+      <div class="sv-list" id="list"></div>
+      <div class="direct">
+        <div class="direct-t"><i class="ti ti-message-circle-bolt"></i><span class="hd">¿No sabes qué tiene tu equipo?</span></div>
+        <textarea id="msg" class="fld" rows="2" placeholder="Mi celular se cayó y la pantalla quedó negra"></textarea>
+        <small class="muted">Opcional. No tienes que marcar ningún servicio, con contarnos basta.</small>
+      </div>
+      <div class="panel-foot">
+        <div id="st"></div>
+        <div class="row"><button class="btn2 sm" id="clr" hidden>Limpiar</button><button class="btn" id="cot"></button></div>
+      </div>
+    </div>`;
+
+  $('#devs').innerHTML = SERVICIOS.map(c => `<button class="dev" data-k="${c.k}"><i class="ti ${c.i}"></i>${c.n}</button>`).join('');
+
+  const row = (s, cat) => {
+    const n = nm(s), on = sel.has(n);
+    return `<div class="sv ${on ? 'sel' : ''}" data-n="${n}"><span class="bx">${on ? '✓' : ''}</span><span>${n}${cat ? ` <small class="muted">· ${cat}</small>` : ''}</span>${isPro(s) ? '<span class="pro">PRO</span>' : ''}</div>`;
+  };
+
+  function render() {
+    const q = $('#q').value.trim().toLowerCase();
+    $$('.dev').forEach(d => d.classList.toggle('on', !q && d.dataset.k === cur));
+    if (q) {
+      const res = [];
+      SERVICIOS.forEach(c => c.s.forEach(s => { if (nm(s).toLowerCase().includes(q)) res.push(row(s, c.n)); }));
+      $('#ph').innerHTML = `<h3><i class="ti ti-search"></i> Resultados</h3><span class="chip">${res.length} encontrados</span>`;
+      $('#list').innerHTML = res.join('') || '<p class="muted">Sin resultados. Cuéntanos abajo qué le pasa y te cotizamos.</p>';
+    } else {
+      const c = SERVICIOS.find(x => x.k === cur);
+      $('#ph').innerHTML = `<h3><i class="ti ${c.i}"></i> ${c.n}</h3><span class="chip"><i class="ti ti-clock"></i> ${c.t}</span>`;
+      $('#list').innerHTML = c.s.map(s => row(s)).join('');
+    }
+    const n = sel.size, pl = n > 1 ? 's' : '';
+    $('#st').innerHTML = n
+      ? `<span class="cnt">${n}</span> <span class="muted">servicio${pl} marcado${pl}</span>`
+      : '<span class="muted">Sin servicios marcados: te cotizamos igual</span>';
+    $('#clr').hidden = !n;
+    $('#cot').innerHTML = `<i class="ti ti-brand-whatsapp"></i> ${n ? `Cotizar ${n} servicio${pl}` : 'Cotizar directo'}`;
+  }
+
+  root.addEventListener('click', e => {
+    const d = e.target.closest('.dev');
+    if (d) { cur = d.dataset.k; $('#q').value = ''; return render(); }
+    const r = e.target.closest('.sv');
+    if (r) { const n = r.dataset.n; sel.has(n) ? sel.delete(n) : sel.add(n); return render(); }
+    if (e.target.closest('#clr')) { sel.clear(); return render(); }
+    if (e.target.closest('#cot')) {
+      const cat = SERVICIOS.find(x => x.k === cur).n;
+      const falla = $('#msg').value.trim();
+      let t = sel.size
+        ? 'Hola SIR TECH, quiero cotizar:\n- ' + [...sel].join('\n- ')
+        : `Hola SIR TECH, quiero cotizar un servicio de ${cat}.`;
+      if (falla) t += `\n\nLo que le pasa: ${falla}`;
+      wa(t);
+    }
+  });
+  $('#q').addEventListener('input', render);
+  render();
+}
+
+/* ---------- Página de servicios ---------- */
+function initServicios() {
+  const el = $('#lista-servicios');
+  if (!el) return;
+  el.innerHTML = SERVICIOS.map(c => `
+    <article class="card reveal" id="${c.k}">
+      <div class="cat-top">
+        <div class="cat-ico"><i class="ti ${c.i}"></i></div>
+        <div><h3>${c.n}</h3><div class="muted">${c.d}</div></div>
+        <span class="chip"><i class="ti ti-clock"></i> ${c.t}</span>
+      </div>
+      <div class="tags">${c.s.map(s => `<span class="tag ${isPro(s) ? 'pro-t' : ''}">${nm(s)}</span>`).join('')}</div>
+      <button class="btn2 sm" data-cat="${c.n}"><i class="ti ti-brand-whatsapp"></i> Cotizar ${c.n.toLowerCase()}</button>
+    </article>`).join('');
+  el.addEventListener('click', e => {
+    const b = e.target.closest('[data-cat]');
+    if (b) wa(`Hola SIR TECH, quiero cotizar un servicio de ${b.dataset.cat}.`);
+  });
+}
+
+/* ---------- Tienda ---------- */
+function initTienda() {
+  const el = $('#tienda');
+  if (!el) return;
+  let cat = 'Todo';
+  const cats = ['Todo', ...new Set(PRODUCTOS.map(p => p.c))];
+  const find = n => PRODUCTOS.find(x => x.n === n);
+
+  function render() {
+    $('#cat-chips').innerHTML = cats.map(c => `<button class="chip ${c === cat ? 'on' : ''}" data-c="${c}">${c}</button>`).join('');
+    $('#prods').innerHTML = PRODUCTOS.filter(p => cat === 'Todo' || p.c === cat).map(p => `
+      <div class="prod">
+        <div class="prod-img">${p.img ? `<img src="${p.img}" alt="${p.n}">` : `<i class="ti ${p.i}"></i>`}${p.b ? `<span class="pro">${p.b}</span>` : ''}</div>
+        <div class="prod-body">
+          <small>${p.c}</small>
+          <div class="prod-name">${p.n}</div>
+          <div class="prod-row"><span class="price">${cop(p.p)}</span><button class="add" data-add="${p.n}" aria-label="Agregar ${p.n}"><i class="ti ti-plus"></i></button></div>
+        </div>
+      </div>`).join('');
+
+    let total = 0;
+    const items = Object.entries(getCart()).map(([n, q]) => {
+      const p = find(n);
+      if (!p) return '';
+      total += p.p * q;
+      return `<div class="ci"><div>${n}<br><small class="muted">${cop(p.p * q)}</small></div><button class="qb" data-dec="${n}" aria-label="Quitar uno">−</button><span>${q}</span><button class="qb" data-add="${n}" aria-label="Agregar uno">+</button></div>`;
+    }).join('');
+    $('#cart-items').innerHTML = items || '<p class="muted">Tu carrito está vacío. Agrega productos con el botón +</p>';
+    $('#cart-total').textContent = cop(total);
+  }
+
+  el.addEventListener('click', e => {
+    const c = e.target.closest('[data-c]');
+    if (c) { cat = c.dataset.c; return render(); }
+    const a = e.target.closest('[data-add]');
+    if (a) { const cart = getCart(); cart[a.dataset.add] = (cart[a.dataset.add] || 0) + 1; saveCart(cart); $('#cart-err').textContent = ''; return render(); }
+    const d = e.target.closest('[data-dec]');
+    if (d) { const cart = getCart(), n = d.dataset.dec; cart[n]--; if (cart[n] <= 0) delete cart[n]; saveCart(cart); return render(); }
+    if (e.target.closest('#cart-clear')) { saveCart({}); return render(); }
+    if (e.target.closest('#cart-send')) {
+      const entries = Object.entries(getCart()).filter(([n]) => find(n));
+      if (!entries.length) { $('#cart-err').textContent = 'Agrega al menos un producto.'; return; }
+      let total = 0;
+      const lines = entries.map(([n, q]) => { const p = find(n); total += p.p * q; return `- ${q} x ${n} (${cop(p.p * q)})`; });
+      wa(`Hola SIR TECH, quiero hacer este pedido:\n${lines.join('\n')}\nTotal: ${cop(total)}`);
+    }
+  });
+  render();
+}
+
+/* ---------- Formulario de contacto ---------- */
+function initContacto() {
+  const f = $('#form-contacto');
+  if (!f) return;
+  $('#f-equipo').innerHTML = '<option value="">Tipo de equipo</option>' + SERVICIOS.map(c => `<option>${c.n}</option>`).join('');
+  const campos = { 'f-nombre': 'Escribe tu nombre', 'f-equipo': 'Elige el tipo de equipo', 'f-mensaje': 'Cuéntanos qué le pasa a tu equipo' };
+  f.addEventListener('submit', e => {
+    e.preventDefault();
+    let ok = true;
+    Object.entries(campos).forEach(([id, msg]) => {
+      const v = $('#' + id).value.trim();
+      $('#e-' + id).textContent = v ? '' : msg;
+      if (!v) ok = false;
+    });
+    if (!ok) return;
+    wa(`Hola SIR TECH, soy ${$('#f-nombre').value.trim()}.\nEquipo: ${$('#f-equipo').value}\n${$('#f-mensaje').value.trim()}`);
+  });
+  ['input', 'change'].forEach(ev => f.addEventListener(ev, e => {
+    const er = $('#e-' + e.target.id);
+    if (er) er.textContent = '';
+  }));
+}
+
+/* ---------- Reseñas ---------- */
+function initResenas() {
+  const el = $('#resenas');
+  if (!el) return;
+  el.innerHTML = RESENAS.map(r => `<div class="card reveal"><div class="stars">★★★★★</div><p class="muted">${r.texto}</p><b>${r.nombre}</b></div>`).join('');
+}
+
+/* ---------- Animación al hacer scroll ---------- */
+function initReveal() {
+  const io = new IntersectionObserver(entries => entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('show'); io.unobserve(e.target); }
+  }), { threshold: 0.12 });
+  $$('.reveal').forEach(el => io.observe(el));
+}
+
+/* ---------- Arranque ---------- */
+document.addEventListener('DOMContentLoaded', () => {
+  renderHeader();
+  renderFooter();
+  updateBadge();
+  $$('[data-cfg]').forEach(el => el.textContent = CONFIG[el.dataset.cfg]);
+  renderUbicacion();
+  initSelector();
+  initServicios();
+  initTienda();
+  initContacto();
+  initResenas();
+  initReveal();
+});
