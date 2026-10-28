@@ -18,7 +18,7 @@ function renderHeader() {
   $('#header').outerHTML = `
   <header class="site-header">
     <nav class="container nav">
-      <a href="index.html" class="logo"><img src="img/logo.png" alt="Logo SIR·TECH"><span>SIR<b>·</b>TECH</span></a>
+      <a href="index.html" class="logo"><img src="favicon_io/android-chrome-192x192.png" alt="Logo SIR·TECH"><span>SIR<b>·</b>TECH</span></a>
       <button class="burger" aria-label="Abrir menú"><i class="ti ti-menu-2"></i></button>
       <div class="menu">
         ${links.map(([href, txt, id]) => `<a href="${href}" class="${id === page ? 'act' : ''}">${txt}</a>`).join('')}
