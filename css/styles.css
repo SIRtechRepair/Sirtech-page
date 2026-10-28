@@ -190,3 +190,13 @@ details p{color:var(--muted);margin:10px 0 0}
 /* Animación al hacer scroll */
 .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease}
 .reveal.show{opacity:1;transform:none}
+
+/* Fondo animado del inicio */
+.hero-bg{position:relative;overflow:hidden}
+.hero-bg canvas{position:absolute;inset:0;width:100%;height:100%;filter:blur(3px);transform:scale(1.06);pointer-events:none}
+.hero-overlay{position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(10,10,10,.75) 0%,rgba(10,10,10,.55) 60%,rgba(10,10,10,.65) 100%)}
+.hero-bg::after{content:'';position:absolute;left:0;right:0;bottom:0;height:120px;background:linear-gradient(transparent,var(--bg));pointer-events:none}
+.hero-bg .hero{position:relative;z-index:2}
+.hero-bg .stat{background:rgba(20,20,20,.65);border-color:rgba(255,255,255,.08);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.hero-bg .chip,.hero-bg .btn2{background:rgba(10,10,10,.4)}
+.hero-bg p.muted{color:#c9c9c9}
