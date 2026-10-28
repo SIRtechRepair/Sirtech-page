@@ -1,9 +1,11 @@
 const $ = (s, el = document) => el.querySelector(s);
 const $$ = (s, el = document) => [...el.querySelectorAll(s)];
-const nm = s => s.replace('*', '');
-const isPro = s => s.startsWith('*');
 const cop = n => '$' + Math.round(n).toLocaleString('es-CO');
 const wa = msg => window.open(`https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(msg)}`, '_blank');
+const norm = s => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+const esAvanzado = (c, s) => s[2] && !c.todoAvanzado;
+const AV = '<span class="av">Avanzado</span>';
+const contar = c => c.g.reduce((a, g) => a + g.s.length, 0);
 
 /* ---------- Encabezado ---------- */
 function renderHeader() {
@@ -91,7 +93,7 @@ function renderUbicacion() {
   });
 }
 
-/* ---------- Selector "¿Qué equipo necesitas reparar?" ---------- */
+/* ---------- Selector "¿Qué equipo necesitas reparar?" (Inicio) ---------- */
 function initSelector() {
   const root = $('#selector');
   if (!root) return;
@@ -99,11 +101,11 @@ function initSelector() {
   let cur = SERVICIOS[0].k;
 
   root.innerHTML = `
-    <div class="search"><i class="ti ti-search"></i><input id="q" class="fld" placeholder="Busca tu falla: pantalla, batería, SSD, HDMI…" aria-label="Buscar servicio"></div>
+    <div class="search"><i class="ti ti-search"></i><input id="q" class="fld" placeholder="Ej: no carga, se calienta, se mojó, pantalla rota…" aria-label="Buscar servicio o síntoma"></div>
     <div class="devs" id="devs"></div>
     <div class="panel">
       <div class="panel-head" id="ph"></div>
-      <div class="sv-list" id="list"></div>
+      <div id="list"></div>
       <div class="direct">
         <div class="direct-t"><i class="ti ti-message-circle-bolt"></i><span class="hd">¿No sabes qué tiene tu equipo?</span></div>
         <textarea id="msg" class="fld" rows="2" placeholder="Mi celular se cayó y la pantalla quedó negra"></textarea>
@@ -117,23 +119,29 @@ function initSelector() {
 
   $('#devs').innerHTML = SERVICIOS.map(c => `<button class="dev" data-k="${c.k}"><i class="ti ${c.i}"></i>${c.n}</button>`).join('');
 
-  const row = (s, cat) => {
-    const n = nm(s), on = sel.has(n);
-    return `<div class="sv ${on ? 'sel' : ''}" data-n="${n}"><span class="bx">${on ? '✓' : ''}</span><span>${n}${cat ? ` <small class="muted">· ${cat}</small>` : ''}</span>${isPro(s) ? '<span class="pro">PRO</span>' : ''}</div>`;
+  const item = (c, s, mostrarCat) => {
+    const on = sel.has(s[0]);
+    return `<div class="sv ${on ? 'sel' : ''}" data-n="${s[0]}"><span class="bx">${on ? '✓' : ''}</span><div><div class="sn">${s[0]}${esAvanzado(c, s) ? AV : ''}</div><div class="sd">${s[1]}${mostrarCat ? ` · <span class="sd-cat">${c.n}</span>` : ''}</div></div></div>`;
   };
 
   function render() {
-    const q = $('#q').value.trim().toLowerCase();
+    const q = norm($('#q').value.trim());
     $$('.dev').forEach(d => d.classList.toggle('on', !q && d.dataset.k === cur));
     if (q) {
       const res = [];
-      SERVICIOS.forEach(c => c.s.forEach(s => { if (nm(s).toLowerCase().includes(q)) res.push(row(s, c.n)); }));
+      SERVICIOS.forEach(c => c.g.forEach(g => g.s.forEach(s => {
+        if (norm(`${s[0]} ${s[1]} ${g.n}`).includes(q)) res.push(item(c, s, true));
+      })));
       $('#ph').innerHTML = `<h3><i class="ti ti-search"></i> Resultados</h3><span class="chip">${res.length} encontrados</span>`;
-      $('#list').innerHTML = res.join('') || '<p class="muted">Sin resultados. Cuéntanos abajo qué le pasa y te cotizamos.</p>';
+      $('#list').innerHTML = res.length
+        ? `<div class="sv-list">${res.join('')}</div>`
+        : '<p class="muted">Sin resultados. Cuéntanos abajo qué le pasa y te cotizamos.</p>';
     } else {
       const c = SERVICIOS.find(x => x.k === cur);
-      $('#ph').innerHTML = `<h3><i class="ti ${c.i}"></i> ${c.n}</h3><span class="chip"><i class="ti ti-clock"></i> ${c.t}</span>`;
-      $('#list').innerHTML = c.s.map(s => row(s)).join('');
+      $('#ph').innerHTML = `<div><h3><i class="ti ${c.i}"></i> ${c.n}</h3><div class="muted ph-d">${c.d}</div></div><span class="chip"><i class="ti ti-clock"></i> ${c.t}</span>`;
+      $('#list').innerHTML = c.g.map(g =>
+        `<div class="gh"><i class="ti ${g.i}"></i>${g.n} <span>· ${g.s.length}</span></div><div class="sv-list">${g.s.map(s => item(c, s)).join('')}</div>`
+      ).join('');
     }
     const n = sel.size, pl = n > 1 ? 's' : '';
     $('#st').innerHTML = n
@@ -167,16 +175,26 @@ function initSelector() {
 function initServicios() {
   const el = $('#lista-servicios');
   if (!el) return;
+  const saltos = $('#saltos');
+  if (saltos) saltos.innerHTML = SERVICIOS.map(c => `<a class="chip" href="#${c.k}"><i class="ti ${c.i}"></i>${c.n}</a>`).join('');
+
   el.innerHTML = SERVICIOS.map(c => `
-    <article class="card reveal" id="${c.k}">
+    <article class="card cat reveal" id="${c.k}">
       <div class="cat-top">
         <div class="cat-ico"><i class="ti ${c.i}"></i></div>
         <div><h3>${c.n}</h3><div class="muted">${c.d}</div></div>
-        <span class="chip"><i class="ti ti-clock"></i> ${c.t}</span>
+        <div class="cat-info"><span class="chip">${contar(c)} servicios</span><span class="chip"><i class="ti ti-clock"></i> ${c.t}</span></div>
       </div>
-      <div class="tags">${c.s.map(s => `<span class="tag ${isPro(s) ? 'pro-t' : ''}">${nm(s)}</span>`).join('')}</div>
-      <button class="btn2 sm" data-cat="${c.n}"><i class="ti ti-brand-whatsapp"></i> Cotizar ${c.n.toLowerCase()}</button>
+      <div class="groups">
+        ${c.g.map(g => `
+          <div class="grp">
+            <div class="gh"><i class="ti ${g.i}"></i>${g.n}</div>
+            ${g.s.map(s => `<div class="it"><div class="sn">${s[0]}${esAvanzado(c, s) ? AV : ''}</div><div class="sd">${s[1]}</div></div>`).join('')}
+          </div>`).join('')}
+      </div>
+      <div class="cat-cta"><button class="btn" data-cat="${c.n}"><i class="ti ti-brand-whatsapp"></i> Cotizar ${c.n.toLowerCase()}</button></div>
     </article>`).join('');
+
   el.addEventListener('click', e => {
     const b = e.target.closest('[data-cat]');
     if (b) wa(`Hola SIR TECH, quiero cotizar un servicio de ${b.dataset.cat}.`);
@@ -350,7 +368,7 @@ function initReveal() {
   if (!('IntersectionObserver' in window)) { $$('.reveal').forEach(el => el.classList.add('show')); return; }
   const io = new IntersectionObserver(entries => entries.forEach(e => {
     if (e.isIntersecting) { e.target.classList.add('show'); io.unobserve(e.target); }
-  }), { threshold: 0.12 });
+  }), { threshold: 0.08 });
   $$('.reveal').forEach(el => io.observe(el));
 }
 
