@@ -46,7 +46,14 @@ const PRODUCTOS = [
 
 /* Cambia estas por reseñas reales de Google */
 const RESENAS = [
-  { nombre:'Cliente de ejemplo', texto:'En otro taller me dijeron que la placa no tenía arreglo. Aquí lo revivieron.' },
-  { nombre:'Cliente de ejemplo', texto:'Le pusieron PTM7950 a mi laptop gamer y bajó 15 grados.' },
-  { nombre:'Cliente de ejemplo', texto:'Mi control tenía drift, ahora con sticks Hall Effect va perfecto.' }
+ /* Reseñas reales de Google. fecha = fecha aproximada en que la dejaron (año-mes-día) */
+const RESENAS = [
+  { nombre:'Miguel Hernandez', fecha:'2026-04-08', texto:'Me gustó mucho el servicio explica muy bien antes de empezar el trabajo, no cobra la asesoria y dice la verdad si vale la pena reparar sus equipos o es mejor invertir en otro además también si la gente desea observa todo el proceso de ensamblaje o reparación puede hacerlo en el mismo taller' },
+  { nombre:'Nikolas Herrera', fecha:'2026-08-26', texto:'Los mejores me ayudaron en un problema el cual no me solucionaron otros técnicos y ellos se demoraron muy poco para…' },
+  { nombre:'Stiven Florez', fecha:'2026-04-08', texto:'Las mejores reparaciones de Arauca y el servicio es excelente, también cuentan con un ambiente muy cálido en cuanto al lugar' },
+  { nombre:'CH1CH4_M0R4D4', fecha:'2026-04-08', texto:'La mejor experiencia para el mantenimiento y reparación de equipos, sin duda uno de los mejores lugares en donde se puede confiar para un buen servicio' },
+  { nombre:'Alejandro Pulido Saravia', fecha:'2026-04-08', texto:'Excelente servicio, atención de calidad y resultados muy buenos.' },
+  { nombre:'samuel cetina', fecha:'2026-02-18', texto:'Buena calidad en los mantenimientos y buenos precios eh reparado muchos equipos ahí y no ah habido inconvenientes' },
+  { nombre:'Alfredo Vargas', fecha:'2026-02-18', texto:'Son exentes en lo que hacen..... Buenas atención.... Sus reparaciones son impecable!' }
+];
 ];
