@@ -243,3 +243,36 @@ details p{color:var(--muted);margin:10px 0 0}
 /* Animación al hacer scroll */
 .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease}
 .reveal.show{opacity:1;transform:none}
+
+
+/* Garantía y términos */
+.g-sum{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:3.5rem}
+.g-sum .card{text-align:center}
+.g-sum i{font-size:30px;color:var(--g)}
+.g-sum b{display:block;font-family:var(--fh);font-size:24px;color:#fff;margin-top:6px}
+.g-sum span{font-size:14px;color:var(--muted)}
+.g-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+.g-stp{background:var(--card2);border:1px solid #232323;border-radius:16px;padding:18px}
+.g-n{width:34px;height:34px;border-radius:50%;background:var(--g);color:#0a0a0a;font-family:var(--fh);font-weight:700;display:flex;align-items:center;justify-content:center;margin-bottom:10px}
+.g-stp h3{font-size:17px;margin-bottom:6px}
+.g-stp p{font-size:14px;line-height:1.55;color:var(--muted);margin:0}
+.terms{max-width:820px;margin:0 auto}
+.terms summary{justify-content:flex-start;gap:12px}
+.terms summary::after{margin-left:auto}
+.terms .num{font-family:var(--fh);color:var(--g);font-size:15px;min-width:26px}
+.terms .body{font-size:15px;line-height:1.7;color:#c4c4c4;padding:12px 0 4px 38px}
+.terms .body ul{margin:4px 0;padding-left:18px}
+.terms .body li{margin:6px 0}
+.terms .body b{color:#fff}
+.g-note{max-width:820px;margin:2rem auto 0;display:flex;gap:10px;align-items:flex-start;background:#0d150a;border:1px dashed #3b5a1f;border-radius:14px;padding:16px;font-size:14px;color:#cfcfcf}
+.g-note i{color:var(--g);font-size:20px}
+.g-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:1.5rem}
+.g-upd{text-align:center;font-size:13px;margin-top:1.5rem}
+@media print{
+  .site-header,.cta,.site-footer,.g-actions,.g-note{display:none !important}
+  body{background:#fff;color:#000}
+  h1,h2,h3,.hd,.terms .body,.terms .body b,.g-stp p,.g-sum span,.page-head p,.sec-sub{color:#000 !important}
+  .card,.g-stp{background:#fff;border:1px solid #ccc}
+  .reveal{opacity:1 !important;transform:none !important}
+  summary::after{display:none}
+}
