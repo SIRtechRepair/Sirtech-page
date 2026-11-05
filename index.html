@@ -21,7 +21,7 @@
   <div id="header"></div>
 
   <main>
-    <section class="hero-bg">
+    <section class="hero-bg" id="inicio">
       <canvas id="fondo-circuito" aria-hidden="true"></canvas>
       <div class="hero-overlay"></div>
       <div class="container hero">
@@ -30,8 +30,8 @@
           <h1>La visita a talleres de tu equipo <span class="hl">termina aquí</span></h1>
           <p class="muted">Desde un cambio de pantalla hasta microsoldadura en placa. Lo que otros no reparan, nosotros sí.</p>
           <div class="actions">
-            <a href="#reparar" class="btn">Ver servicios</a>
-            <a href="contacto.html" class="btn2"><i class="ti ti-map-pin"></i> Cómo llegar</a>
+            <a href="#reparar" class="btn"><i class="ti ti-bolt"></i> Cotizar mi reparación</a>
+            <a href="#ubicacion" class="btn2"><i class="ti ti-map-pin"></i> Cómo llegar</a>
           </div>
         </div>
         <div class="stats reveal">
@@ -43,10 +43,18 @@
       </div>
     </section>
 
-    <section class="sec" id="reparar">
+    <section class="sec selector-sec" id="reparar">
       <div class="container">
-        <h2 class="sec-title">¿Qué equipo necesitas reparar?</h2>
-        <p class="sec-sub">Marca los servicios que necesitas o contáctanos a través de WhatsApp</p>
+        <div class="selector-head">
+          <span class="chip"><i class="ti ti-bolt"></i> Cotiza en 1 minuto</span>
+          <h2 class="sec-title">¿Qué equipo <span class="hl">necesitas reparar</span>?</h2>
+          <p class="sec-sub">Elige tu equipo, marca los servicios y envía la cotización por WhatsApp. Sin registro y sin compromiso.</p>
+        </div>
+        <div class="selector-steps">
+          <span><b>1</b> Elige tu equipo</span>
+          <span><b>2</b> Marca lo que le pasa</span>
+          <span><b>3</b> Cotiza por WhatsApp</span>
+        </div>
         <div id="selector"></div>
       </div>
     </section>
@@ -89,11 +97,34 @@
       </div>
     </section>
 
-    <section class="sec" id="ubicacion">
+    <section class="sec" id="tienda">
       <div class="container">
-        <h2 class="sec-title">Visítanos en nuestra sede</h2>
-        <p class="sec-sub">Llega sin cita, te atendemos de una</p>
-        <div class="ubi js-ubicacion"></div>
+        <div class="sec-head">
+          <span class="chip">Accesorios y repuestos</span>
+          <h2 class="sec-title">Tienda</h2>
+          <p class="sec-sub">Arma tu pedido y envíalo por WhatsApp. Te confirmamos disponibilidad por chat.</p>
+        </div>
+        <div class="cat-chips" id="cat-chips"></div>
+        <div class="shop">
+          <div class="prods" id="prods"></div>
+          <aside class="card cart">
+            <h3><i class="ti ti-shopping-cart"></i> Tu carrito</h3>
+            <div id="cart-items"></div>
+            <input class="fld cart-model" id="cart-model" maxlength="60" placeholder="Modelo de tu equipo (opcional)">
+            <div class="total"><span class="muted">Total</span><span class="price" id="cart-total">$0</span></div>
+            <button class="btn" id="cart-send" style="width:100%"><i class="ti ti-brand-whatsapp"></i> Enviar pedido por WhatsApp</button>
+            <button class="btn2 sm" id="cart-clear" style="width:100%;margin-top:8px">Vaciar carrito</button>
+            <button class="link-wa" id="cart-cotiza"><i class="ti ti-brand-whatsapp"></i> ¿No encuentras algo? Cotiza por WhatsApp</button>
+            <div class="err" id="cart-err"></div>
+          </aside>
+        </div>
+        <div class="shop-cta">
+          <div>
+            <h3>¿No encuentras lo que buscas?</h3>
+            <p>Cotiza directamente con nosotros a través de WhatsApp.</p>
+          </div>
+          <button class="btn" id="cta-cotiza"><i class="ti ti-brand-whatsapp"></i> Cotizar por WhatsApp</button>
+        </div>
       </div>
     </section>
 
@@ -104,6 +135,30 @@
         <details><summary>¿Reparan equipos que otro taller dio por perdidos?</summary><p>Sí. Con microelectrónica y reballing recuperamos placas que muchos talleres descartan.</p></details>
         <details><summary>¿Atienden empresas?</summary><p>Sí, con pólizas de mantenimiento periódico, redes y cámaras CCTV.</p></details>
         <details><summary>¿Qué medios de pago aceptan?</summary><p>Efectivo, Nequi, Daviplata, transferencia y tarjetas.</p></details>
+      </div>
+    </section>
+
+    <section class="sec" id="contacto">
+      <div class="container">
+        <div class="sec-head">
+          <span class="chip">Te respondemos rápido</span>
+          <h2 class="sec-title">Visítanos o escríbenos</h2>
+          <p class="sec-sub">Llega sin cita, o llena el formulario y te llega directo a WhatsApp.</p>
+        </div>
+        <div class="ubi js-ubicacion" id="ubicacion"></div>
+        <div class="contact-form-block">
+          <h3>Escríbenos</h3>
+          <p class="sec-sub">Cuéntanos qué le pasa a tu equipo y te respondemos por WhatsApp.</p>
+          <form class="form" id="form-contacto" novalidate>
+            <div class="form-grid">
+              <div><input class="fld" id="f-nombre" placeholder="Tu nombre"><div class="err" id="e-f-nombre"></div></div>
+              <div><select class="fld" id="f-equipo"></select><div class="err" id="e-f-equipo"></div></div>
+            </div>
+            <textarea class="fld" id="f-mensaje" rows="5" placeholder="Mi celular no carga desde ayer"></textarea>
+            <div class="err" id="e-f-mensaje"></div>
+            <button type="submit" class="btn" style="margin-top:12px"><i class="ti ti-brand-whatsapp"></i> Enviar por WhatsApp</button>
+          </form>
+        </div>
       </div>
     </section>
   </main>

@@ -104,16 +104,47 @@ const SERVICIOS = [
   ]}
 ];
 
-/* Precios de ejemplo. Para usar foto: img:'img/productos/vidrio.jpg' */
+/* Catálogo basado en las ventas reales (hoja 2026).
+   Los precios de protección son "desde": varían según el modelo.
+   Para usar foto: img:'img/productos/archivo.jpg' */
 const PRODUCTOS = [
-  { n:'Vidrio templado 9H', c:'Protección', i:'ti-shield', p:15000, b:'Más vendido' },
-  { n:'Hidrogel UV', c:'Protección', i:'ti-shield-check', p:25000 },
-  { n:'Cargador 20W USB-C', c:'Carga', i:'ti-plug', p:45000 },
-  { n:'Cable USB-C reforzado', c:'Carga', i:'ti-usb', p:18000 },
-  { n:'Power bank 10.000 mAh', c:'Carga', i:'ti-battery-charging', p:75000, b:'Nuevo' },
-  { n:'Audífonos inalámbricos', c:'Audio', i:'ti-headphones', p:89000 },
-  { n:'Memoria microSD 128 GB', c:'Almacenamiento', i:'ti-device-sd-card', p:42000 },
-  { n:'SSD 512 GB', c:'Almacenamiento', i:'ti-device-floppy', p:159000 }
+  /* Cables */
+  { n:'Cable Tipo C a Lightning', c:'Cables', i:'ti-usb', p:20000, b:'Más vendido' },
+  { n:'Cable Tipo C a Tipo C (iPhone)', c:'Cables', i:'ti-usb', p:25000 },
+  { n:'Cable Tipo C a Tipo C (Android)', c:'Cables', i:'ti-usb', p:15000 },
+  { n:'Cable USB-A a Lightning', c:'Cables', i:'ti-usb', p:15000 },
+  { n:'Cable USB-A a Tipo C', c:'Cables', i:'ti-usb', p:15000 },
+  { n:'Cable USB-A a Micro USB (V8)', c:'Cables', i:'ti-usb', p:12000 },
+
+  /* Carga */
+  { n:'Cabezote 25W iPhone', c:'Carga', i:'ti-plug', p:30000, b:'Más vendido' },
+  { n:'Cargador completo 25W iPhone', c:'Carga', i:'ti-battery-charging', p:55000, b:'Más vendido' },
+  { n:'Cargador completo 20W iPhone', c:'Carga', i:'ti-battery-charging', p:42000 },
+  { n:'Cargador completo 67W Tipo C', c:'Carga', i:'ti-battery-charging', p:50000 },
+  { n:'Cargador completo 45W Tipo C', c:'Carga', i:'ti-battery-charging', p:55000 },
+  { n:'Cargador completo 20W Tipo C', c:'Carga', i:'ti-battery-charging', p:22000 },
+
+  /* Protección (precios "desde", varían por modelo) */
+  { n:'Vidrio templado', c:'Protección', i:'ti-shield', p:20000, desde:true, b:'Más vendido' },
+  { n:'Vidrio blindado', c:'Protección', i:'ti-shield-check', p:30000, desde:true },
+  { n:'Vidrio antiespía', c:'Protección', i:'ti-eye-off', p:40000, desde:true },
+  { n:'Protector de cámara', c:'Protección', i:'ti-camera', p:25000, desde:true },
+  { n:'Forro / case', c:'Protección', i:'ti-device-mobile', p:30000, desde:true },
+
+  /* Audio */
+  { n:'Audífonos réplica AirPods', c:'Audio', i:'ti-headphones', p:80000 },
+  { n:'Audífonos réplica Samsung', c:'Audio', i:'ti-headphones', p:55000 },
+  { n:'Audífonos réplica Xiaomi', c:'Audio', i:'ti-headphones', p:55000 },
+  { n:'Audífonos réplica Redmi', c:'Audio', i:'ti-headphones', p:50000 },
+
+  /* Almacenamiento */
+  { n:'Memoria USB 16 GB', c:'Almacenamiento', i:'ti-usb', p:40000 },
+  { n:'Memoria microSD 64 GB', c:'Almacenamiento', i:'ti-device-sd-card', p:40000 },
+
+  /* Periféricos */
+  { n:'Mouse', c:'Periféricos', i:'ti-mouse', p:30000 },
+  { n:'Teclado', c:'Periféricos', i:'ti-keyboard', p:50000 },
+  { n:'Combo teclado y mouse', c:'Periféricos', i:'ti-keyboard', p:100000 }
 ];
 
 /* Reseñas reales de Google. fecha = fecha aproximada en que la dejaron (año-mes-día) */

@@ -11,11 +11,10 @@ const contar = c => c.g.reduce((a, g) => a + g.s.length, 0);
 function renderHeader() {
   const page = document.body.dataset.page;
   const links = [
-    ['index.html', 'Inicio', 'inicio'],
-    ['servicios.html', 'Servicios', 'servicios'],
-    ['tienda.html', 'Tienda', 'tienda'],
+    ['index.html#inicio', 'Inicio', 'inicio'],
+    ['index.html#tienda', 'Tienda', 'tienda'],
     ['garantia.html', 'Garantía y términos', 'garantia'],
-    ['contacto.html', 'Contacto', 'contacto']
+    ['index.html#contacto', 'Contacto', 'contacto']
   ];
   $('#header').outerHTML = `
   <header class="site-header">
@@ -23,8 +22,8 @@ function renderHeader() {
       <a href="index.html" class="logo"><img src="favicon_io/android-chrome-192x192.png" alt="Logo SIR·TECH"><span>SIR<b>·</b>TECH</span></a>
       <button class="burger" aria-label="Abrir menú"><i class="ti ti-menu-2"></i></button>
       <div class="menu">
-        ${links.map(([href, txt, id]) => `<a href="${href}" class="${id === page ? 'act' : ''}">${txt}</a>`).join('')}
-        <a href="tienda.html" class="cart-link" aria-label="Carrito"><i class="ti ti-shopping-cart"></i><span class="badge" id="badge"></span></a>
+        ${links.map(([href, txt, id]) => `<a href="${href}" data-nav="${id}" class="${id === page ? 'act' : ''}">${txt}</a>`).join('')}
+        <a href="index.html#tienda" class="cart-link" aria-label="Carrito"><i class="ti ti-shopping-cart"></i><span class="badge" id="badge"></span></a>
       </div>
     </nav>
   </header>`;
@@ -32,6 +31,20 @@ function renderHeader() {
     const open = $('.menu').classList.toggle('open');
     $('.burger i').className = open ? 'ti ti-x' : 'ti ti-menu-2';
   });
+
+  if (page === 'inicio' && 'IntersectionObserver' in window) {
+    const enlaces = $$('.menu a[data-nav]');
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        enlaces.forEach(a => a.classList.toggle('act', a.dataset.nav === e.target.id));
+      });
+    }, { rootMargin: '-35% 0px -55% 0px' });
+    ['inicio', 'tienda', 'contacto'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) io.observe(el);
+    });
+  }
 }
 
 /* ---------- Pie de página ---------- */
@@ -217,7 +230,7 @@ function initTienda() {
         <div class="prod-body">
           <small>${p.c}</small>
           <div class="prod-name">${p.n}</div>
-          <div class="prod-row"><span class="price">${cop(p.p)}</span><button class="add" data-add="${p.n}" aria-label="Agregar ${p.n}"><i class="ti ti-plus"></i></button></div>
+          <div class="prod-row"><span class="pz">${p.desde ? '<small class="desde">Desde</small> ' : ''}<span class="price">${cop(p.p)}</span></span><button class="add" data-add="${p.n}" aria-label="Agregar ${p.n}"><i class="ti ti-plus"></i></button></div>
         </div>
       </div>`).join('');
 
@@ -245,7 +258,12 @@ function initTienda() {
       if (!entries.length) { $('#cart-err').textContent = 'Agrega al menos un producto.'; return; }
       let total = 0;
       const lines = entries.map(([n, q]) => { const p = find(n); total += p.p * q; return `- ${q} x ${n} (${cop(p.p * q)})`; });
-      wa(`Hola SIR TECH, quiero hacer este pedido:\n${lines.join('\n')}\nTotal: ${cop(total)}`);
+      const modelo = $('#cart-model').value.trim();
+      const extra = modelo ? `\nModelo de mi equipo: ${modelo}` : '';
+      wa(`Hola SIR TECH, quiero hacer este pedido:\n${lines.join('\n')}${extra}\nTotal: ${cop(total)}`);
+    }
+    if (e.target.closest('#cta-cotiza') || e.target.closest('#cart-cotiza')) {
+      wa('Hola SIR TECH, no encuentro lo que busco en la tienda. ¿Me ayudan con una cotización?');
     }
   });
   render();
