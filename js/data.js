@@ -106,45 +106,45 @@ const SERVICIOS = [
 
 /* Catálogo basado en las ventas reales (hoja 2026).
    Los precios de protección son "desde": varían según el modelo.
-   Para usar foto: img:'img/productos/archivo.jpg' */
+   Las fotos están en img/productos/ (ver FUENTES.txt). */
 const PRODUCTOS = [
   /* Cables */
-  { n:'Cable Tipo C a Lightning', c:'Cables', i:'ti-usb', p:20000, b:'Más vendido' },
-  { n:'Cable Tipo C a Tipo C (iPhone)', c:'Cables', i:'ti-usb', p:25000 },
-  { n:'Cable Tipo C a Tipo C (Android)', c:'Cables', i:'ti-usb', p:15000 },
-  { n:'Cable USB-A a Lightning', c:'Cables', i:'ti-usb', p:15000 },
-  { n:'Cable USB-A a Tipo C', c:'Cables', i:'ti-usb', p:15000 },
-  { n:'Cable USB-A a Micro USB (V8)', c:'Cables', i:'ti-usb', p:12000 },
+  { n:'Cable Tipo C a Lightning', c:'Cables', i:'ti-usb', p:20000, img:'img/productos/cable-tc-lightning.jpg', b:'Más vendido' },
+  { n:'Cable Tipo C a Tipo C (iPhone)', c:'Cables', i:'ti-usb', p:25000, img:'img/productos/cable-tc-tc-iphone.jpg' },
+  { n:'Cable Tipo C a Tipo C (Android)', c:'Cables', i:'ti-usb', p:15000, img:'img/productos/cable-tc-tc-android.jpg' },
+  { n:'Cable USB-A a Lightning', c:'Cables', i:'ti-usb', p:15000, img:'img/productos/cable-usb-lightning.jpg' },
+  { n:'Cable USB-A a Tipo C', c:'Cables', i:'ti-usb', p:15000, img:'img/productos/cable-usb-tc.jpg' },
+  { n:'Cable USB-A a Micro USB (V8)', c:'Cables', i:'ti-usb', p:12000, img:'img/productos/cable-v8.jpg' },
 
   /* Carga */
-  { n:'Cabezote 25W iPhone', c:'Carga', i:'ti-plug', p:30000, b:'Más vendido' },
-  { n:'Cargador completo 25W iPhone', c:'Carga', i:'ti-battery-charging', p:55000, b:'Más vendido' },
-  { n:'Cargador completo 20W iPhone', c:'Carga', i:'ti-battery-charging', p:42000 },
-  { n:'Cargador completo 67W Tipo C', c:'Carga', i:'ti-battery-charging', p:50000 },
-  { n:'Cargador completo 45W Tipo C', c:'Carga', i:'ti-battery-charging', p:55000 },
-  { n:'Cargador completo 20W Tipo C', c:'Carga', i:'ti-battery-charging', p:22000 },
+  { n:'Cabezote 25W iPhone', c:'Carga', i:'ti-plug', p:30000, img:'img/productos/cabezote-25w.jpg', b:'Más vendido' },
+  { n:'Cargador completo 25W iPhone', c:'Carga', i:'ti-battery-charging', p:55000, img:'img/productos/cargador-25w.jpg', b:'Más vendido' },
+  { n:'Cargador completo 20W iPhone', c:'Carga', i:'ti-battery-charging', p:42000, img:'img/productos/cargador-20w.jpg' },
+  { n:'Cargador completo 67W Tipo C', c:'Carga', i:'ti-battery-charging', p:50000, img:'img/productos/cargador-67w.jpg' },
+  { n:'Cargador completo 45W Tipo C', c:'Carga', i:'ti-battery-charging', p:55000, img:'img/productos/cargador-45w.jpg' },
+  { n:'Cargador completo 20W Tipo C', c:'Carga', i:'ti-battery-charging', p:22000, img:'img/productos/cargador-20w-tc.jpg' },
 
   /* Protección (precios "desde", varían por modelo) */
-  { n:'Vidrio templado', c:'Protección', i:'ti-shield', p:20000, desde:true, b:'Más vendido' },
-  { n:'Vidrio blindado', c:'Protección', i:'ti-shield-check', p:30000, desde:true },
-  { n:'Vidrio antiespía', c:'Protección', i:'ti-eye-off', p:40000, desde:true },
-  { n:'Protector de cámara', c:'Protección', i:'ti-camera', p:25000, desde:true },
-  { n:'Forro / case', c:'Protección', i:'ti-device-mobile', p:30000, desde:true },
+  { n:'Vidrio templado', c:'Protección', i:'ti-shield', p:20000, desde:true, img:'img/productos/vidrio-templado.jpg', b:'Más vendido' },
+  { n:'Vidrio blindado', c:'Protección', i:'ti-shield-check', p:30000, desde:true, img:'img/productos/vidrio-blindado.jpg' },
+  { n:'Vidrio antiespía', c:'Protección', i:'ti-eye-off', p:40000, desde:true, img:'img/productos/vidrio-antiespia.jpg' },
+  { n:'Protector de cámara', c:'Protección', i:'ti-camera', p:25000, desde:true, img:'img/productos/protector-camara.jpg' },
+  { n:'Forro / case', c:'Protección', i:'ti-device-mobile', p:30000, desde:true, img:'img/productos/forro.jpg' },
 
   /* Audio */
-  { n:'Audífonos réplica AirPods', c:'Audio', i:'ti-headphones', p:80000 },
-  { n:'Audífonos réplica Samsung', c:'Audio', i:'ti-headphones', p:55000 },
-  { n:'Audífonos réplica Xiaomi', c:'Audio', i:'ti-headphones', p:55000 },
-  { n:'Audífonos réplica Redmi', c:'Audio', i:'ti-headphones', p:50000 },
+  { n:'Audífonos réplica AirPods', c:'Audio', i:'ti-headphones', p:80000, img:'img/productos/audifonos-airpods.jpg' },
+  { n:'Audífonos réplica Samsung', c:'Audio', i:'ti-headphones', p:55000, img:'img/productos/audifonos-samsung.jpg' },
+  { n:'Audífonos réplica Xiaomi', c:'Audio', i:'ti-headphones', p:55000, img:'img/productos/audifonos-xiaomi.jpg' },
+  { n:'Audífonos réplica Redmi', c:'Audio', i:'ti-headphones', p:50000, img:'img/productos/audifonos-redmi.jpg' },
 
   /* Almacenamiento */
-  { n:'Memoria USB 16 GB', c:'Almacenamiento', i:'ti-usb', p:40000 },
-  { n:'Memoria microSD 64 GB', c:'Almacenamiento', i:'ti-device-sd-card', p:40000 },
+  { n:'Memoria USB 16 GB', c:'Almacenamiento', i:'ti-usb', p:40000, img:'img/productos/memoria-usb.jpg' },
+  { n:'Memoria microSD 64 GB', c:'Almacenamiento', i:'ti-device-sd-card', p:40000, img:'img/productos/microsd.jpg' },
 
   /* Periféricos */
-  { n:'Mouse', c:'Periféricos', i:'ti-mouse', p:30000 },
-  { n:'Teclado', c:'Periféricos', i:'ti-keyboard', p:50000 },
-  { n:'Combo teclado y mouse', c:'Periféricos', i:'ti-keyboard', p:100000 }
+  { n:'Mouse', c:'Periféricos', i:'ti-mouse', p:30000, img:'img/productos/mouse.jpg' },
+  { n:'Teclado', c:'Periféricos', i:'ti-keyboard', p:50000, img:'img/productos/teclado.jpg' },
+  { n:'Combo teclado y mouse', c:'Periféricos', i:'ti-keyboard', p:100000, img:'img/productos/combo.jpg' }
 ];
 
 /* Reseñas reales de Google. fecha = fecha aproximada en que la dejaron (año-mes-día) */

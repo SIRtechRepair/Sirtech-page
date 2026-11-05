@@ -15,7 +15,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,500;0,700;1,700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
-  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/styles.css?v=5">
+  <script>if (location.hash === '#tienda') location.replace('tienda.html');</script>
 </head>
 <body data-page="inicio">
   <div id="header"></div>
@@ -97,37 +98,6 @@
       </div>
     </section>
 
-    <section class="sec" id="tienda">
-      <div class="container">
-        <div class="sec-head">
-          <span class="chip">Accesorios y repuestos</span>
-          <h2 class="sec-title">Tienda</h2>
-          <p class="sec-sub">Arma tu pedido y envíalo por WhatsApp. Te confirmamos disponibilidad por chat.</p>
-        </div>
-        <div class="cat-chips" id="cat-chips"></div>
-        <div class="shop">
-          <div class="prods" id="prods"></div>
-          <aside class="card cart">
-            <h3><i class="ti ti-shopping-cart"></i> Tu carrito</h3>
-            <div id="cart-items"></div>
-            <input class="fld cart-model" id="cart-model" maxlength="60" placeholder="Modelo de tu equipo (opcional)">
-            <div class="total"><span class="muted">Total</span><span class="price" id="cart-total">$0</span></div>
-            <button class="btn" id="cart-send" style="width:100%"><i class="ti ti-brand-whatsapp"></i> Enviar pedido por WhatsApp</button>
-            <button class="btn2 sm" id="cart-clear" style="width:100%;margin-top:8px">Vaciar carrito</button>
-            <button class="link-wa" id="cart-cotiza"><i class="ti ti-brand-whatsapp"></i> ¿No encuentras algo? Cotiza por WhatsApp</button>
-            <div class="err" id="cart-err"></div>
-          </aside>
-        </div>
-        <div class="shop-cta">
-          <div>
-            <h3>¿No encuentras lo que buscas?</h3>
-            <p>Cotiza directamente con nosotros a través de WhatsApp.</p>
-          </div>
-          <button class="btn" id="cta-cotiza"><i class="ti ti-brand-whatsapp"></i> Cotizar por WhatsApp</button>
-        </div>
-      </div>
-    </section>
-
     <section class="sec">
       <div class="container faq">
         <h2 class="sec-title" style="margin-bottom:1.5rem">Preguntas frecuentes</h2>
@@ -164,8 +134,8 @@
   </main>
 
   <div id="footer"></div>
-  <script src="js/data.js"></script>
-  <script src="js/main.js"></script>
+  <script src="js/data.js?v=5"></script>
+  <script src="js/main.js?v=5"></script>
   <script src="js/fondo.js"></script>
 </body>
 </html>

@@ -12,9 +12,9 @@ function renderHeader() {
   const page = document.body.dataset.page;
   const links = [
     ['index.html#inicio', 'Inicio', 'inicio'],
-    ['index.html#tienda', 'Tienda', 'tienda'],
-    ['garantia.html', 'Garantía y términos', 'garantia'],
-    ['index.html#contacto', 'Contacto', 'contacto']
+    ['index.html#contacto', 'Contacto', 'contacto'],
+    ['tienda.html', 'Tienda', 'tienda'],
+    ['garantia.html', 'Garantía y términos', 'garantia']
   ];
   $('#header').outerHTML = `
   <header class="site-header">
@@ -23,7 +23,7 @@ function renderHeader() {
       <button class="burger" aria-label="Abrir menú"><i class="ti ti-menu-2"></i></button>
       <div class="menu">
         ${links.map(([href, txt, id]) => `<a href="${href}" data-nav="${id}" class="${id === page ? 'act' : ''}">${txt}</a>`).join('')}
-        <a href="index.html#tienda" class="cart-link" aria-label="Carrito"><i class="ti ti-shopping-cart"></i><span class="badge" id="badge"></span></a>
+        <a href="tienda.html" class="cart-link" aria-label="Carrito"><i class="ti ti-shopping-cart"></i><span class="badge" id="badge"></span></a>
       </div>
     </nav>
   </header>`;
@@ -40,7 +40,7 @@ function renderHeader() {
         enlaces.forEach(a => a.classList.toggle('act', a.dataset.nav === e.target.id));
       });
     }, { rootMargin: '-35% 0px -55% 0px' });
-    ['inicio', 'tienda', 'contacto'].forEach(id => {
+    ['inicio', 'contacto'].forEach(id => {
       const el = document.getElementById(id);
       if (el) io.observe(el);
     });
@@ -226,7 +226,7 @@ function initTienda() {
     $('#cat-chips').innerHTML = cats.map(c => `<button class="chip ${c === cat ? 'on' : ''}" data-c="${c}">${c}</button>`).join('');
     $('#prods').innerHTML = PRODUCTOS.filter(p => cat === 'Todo' || p.c === cat).map(p => `
       <div class="prod">
-        <div class="prod-img">${p.img ? `<img src="${p.img}" alt="${p.n}">` : `<i class="ti ${p.i}"></i>`}${p.b ? `<span class="pro">${p.b}</span>` : ''}</div>
+        <div class="prod-img">${p.img ? `<img src="${p.img}" alt="${p.n}" width="600" height="600" loading="lazy" decoding="async">` : `<i class="ti ${p.i}"></i>`}${p.b ? `<span class="pro">${p.b}</span>` : ''}</div>
         <div class="prod-body">
           <small>${p.c}</small>
           <div class="prod-name">${p.n}</div>

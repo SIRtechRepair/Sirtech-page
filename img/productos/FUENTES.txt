@@ -1,0 +1,51 @@
+FOTOS DE PRODUCTOS — SIR·TECH
+=============================
+
+Todas las imágenes se descargaron, recortaron a 600 × 600 px y comprimieron
+para usarlas como miniaturas de referencia en la tienda.
+
+Son fotos ilustrativas: no corresponden necesariamente a los modelos exactos
+que se venden en el local.
+
+PEXELS (licencia Pexels: uso gratuito, sin atribución obligatoria)
+------------------------------------------------------------------
+cable-tc-lightning.jpg  https://www.pexels.com/photo/close-up-photography-of-white-iphone-charger-914912/
+cable-tc-tc-iphone.jpg  https://www.pexels.com/photo/usb-c-cable-on-white-surface-3921713/
+cable-usb-lightning.jpg https://www.pexels.com/photo/close-up-of-cable-12671356/
+cable-usb-tc.jpg        https://www.pexels.com/photo/914915/
+cabezote-25w.jpg        https://www.pexels.com/photo/3921700/
+cargador-25w.jpg        https://www.pexels.com/photo/close-up-of-white-usb-charger-and-cable-36012993/
+cargador-20w.jpg        https://www.pexels.com/photo/3921628/
+cargador-67w.jpg        https://www.pexels.com/photo/white-67w-charger-and-cable-on-yellow-background-29407254/
+cargador-45w.jpg        https://www.pexels.com/photo/3921717/
+cargador-20w-tc.jpg     https://www.pexels.com/photo/4097201/
+vidrio-templado.jpg     https://www.pexels.com/photo/a-hand-holding-a-tempered-glass-of-samsung-galaxy-s9-7742506/
+vidrio-blindado.jpg     https://www.pexels.com/photo/hand-holding-tempered-glass-7742507/
+vidrio-antiespia.jpg    https://www.pexels.com/photo/404280/
+protector-camara.jpg    https://www.pexels.com/photo/camera-of-an-iphone-with-red-case-in-close-up-photography-4574587/
+forro.jpg               https://www.pexels.com/photo/smartphone-in-case-19784109/
+audifonos-airpods.jpg   https://www.pexels.com/photo/3921864/
+audifonos-samsung.jpg   https://www.pexels.com/photo/16703772/
+audifonos-xiaomi.jpg    https://www.pexels.com/photo/17810093/
+audifonos-redmi.jpg     https://www.pexels.com/photo/11599423/
+memoria-usb.jpg         https://www.pexels.com/photo/10336136/
+mouse.jpg               https://www.pexels.com/photo/20510001/
+teclado.jpg             https://www.pexels.com/photo/18641167/
+combo.jpg               https://www.pexels.com/photo/20510012/
+
+WIKIMEDIA COMMONS
+-----------------
+cable-tc-tc-android.jpg
+  Archivo: USB-C cable 2017 A.jpg
+  Licencia: CC0 1.0 (dominio público)
+  https://commons.wikimedia.org/wiki/File:USB-C_cable_2017_A.jpg
+
+cable-v8.jpg
+  Archivo: Micro USB phone charger.jpg
+  Licencia: dominio público
+  https://commons.wikimedia.org/wiki/File:Micro_USB_phone_charger.jpg
+
+microsd.jpg
+  Archivo: SanDisk Ultra 32GB MicroSD card with Adapter - 2015.jpg
+  Licencia: CC0 1.0 (dominio público)
+  https://commons.wikimedia.org/wiki/File:SanDisk_Ultra_32GB_MicroSD_card_with_Adapter_-_2015.jpg

@@ -4,13 +4,58 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tienda | SIR·TECH</title>
-  <meta name="robots" content="noindex">
-  <link rel="canonical" href="index.html#tienda">
-  <meta http-equiv="refresh" content="0; url=index.html#tienda">
-  <style>body{margin:0;background:#0a0a0a;color:#f2f2f2;font-family:system-ui,sans-serif;display:grid;place-items:center;min-height:100vh;text-align:center;padding:2rem}a{color:#7CFC00}</style>
-  <script>location.replace('index.html#tienda');</script>
+  <meta name="description" content="Cables, cargadores, vidrios, forros, audífonos y accesorios para celulares y computadores en Arauca. Pide por WhatsApp.">
+  <link rel="icon" type="image/x-icon" href="favicon_io/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon_io/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon_io/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="favicon_io/apple-touch-icon.png">
+  <link rel="manifest" href="favicon_io/site.webmanifest">
+  <meta name="theme-color" content="#0a0a0a">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,500;0,700;1,700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+  <link rel="stylesheet" href="css/styles.css?v=5">
 </head>
-<body>
-  <p>Te llevamos a la tienda.<br>Si no redirige, <a href="index.html#tienda">haz clic aquí</a>.</p>
+<body data-page="tienda">
+  <div id="header"></div>
+
+  <main>
+    <section class="page-head">
+      <span class="chip"><i class="ti ti-shopping-bag"></i> Accesorios y repuestos</span>
+      <h1>Tienda</h1>
+      <p>Cables, cargadores, protección y más. Arma tu pedido y envíalo por WhatsApp; te confirmamos disponibilidad por chat.</p>
+    </section>
+
+    <section class="sec sec-tienda" id="tienda">
+      <div class="container">
+        <div class="cat-chips" id="cat-chips"></div>
+        <div class="shop">
+          <div class="prods" id="prods"></div>
+          <aside class="card cart">
+            <h3><i class="ti ti-shopping-cart"></i> Tu carrito</h3>
+            <div id="cart-items"></div>
+            <input class="fld cart-model" id="cart-model" maxlength="60" placeholder="Modelo de tu equipo (opcional)">
+            <div class="total"><span class="muted">Total</span><span class="price" id="cart-total">$0</span></div>
+            <button class="btn" id="cart-send" style="width:100%"><i class="ti ti-brand-whatsapp"></i> Enviar pedido por WhatsApp</button>
+            <button class="btn2 sm" id="cart-clear" style="width:100%;margin-top:8px">Vaciar carrito</button>
+            <button class="link-wa" id="cart-cotiza"><i class="ti ti-brand-whatsapp"></i> ¿No encuentras algo? Cotiza por WhatsApp</button>
+            <div class="err" id="cart-err"></div>
+          </aside>
+        </div>
+        <div class="shop-cta">
+          <div>
+            <h3>¿No encuentras lo que buscas?</h3>
+            <p>Cotiza directamente con nosotros a través de WhatsApp.</p>
+          </div>
+          <button class="btn" id="cta-cotiza"><i class="ti ti-brand-whatsapp"></i> Cotizar por WhatsApp</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="footer"></div>
+  <script src="js/data.js?v=5"></script>
+  <script src="js/main.js?v=5"></script>
 </body>
 </html>
