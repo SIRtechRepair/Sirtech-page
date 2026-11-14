@@ -5,6 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tienda | SIR·TECH</title>
   <meta name="description" content="Cables, cargadores, vidrios, forros, audífonos y accesorios para celulares y computadores en Arauca. Pide por WhatsApp.">
+  <link rel="canonical" href="https://sirtecharauca.com/tienda.html">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="es_CO">
+  <meta property="og:title" content="Tienda | SIR·TECH">
+  <meta property="og:description" content="Cables, cargadores, vidrios, forros, audífonos y accesorios para celulares y computadores en Arauca. Pide por WhatsApp.">
+  <meta property="og:url" content="https://sirtecharauca.com/tienda.html">
+  <meta property="og:image" content="https://sirtecharauca.com/sirtech.png">
   <link rel="icon" type="image/x-icon" href="favicon_io/favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon_io/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="favicon_io/favicon-16x16.png">
@@ -13,9 +20,9 @@
   <meta name="theme-color" content="#0a0a0a">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,500;0,700;1,700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
-  <link rel="stylesheet" href="css/styles.css?v=5">
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,500;0,700;1,700&amp;family=Space+Grotesk:wght@400;500;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.51.0/dist/tabler-icons.min.css">
+  <link rel="stylesheet" href="css/styles.css?v=20261114">
 </head>
 <body data-page="tienda">
   <div id="header"></div>
@@ -35,12 +42,12 @@
           <aside class="card cart">
             <h3><i class="ti ti-shopping-cart"></i> Tu carrito</h3>
             <div id="cart-items"></div>
-            <input class="fld cart-model" id="cart-model" maxlength="60" placeholder="Modelo de tu equipo (opcional)">
+            <input class="fld cart-model" id="cart-model" maxlength="60" placeholder="Modelo de tu equipo (opcional)" aria-label="Modelo de tu equipo (opcional)">
             <div class="total"><span class="muted">Total</span><span class="price" id="cart-total">$0</span></div>
-            <button class="btn" id="cart-send" style="width:100%"><i class="ti ti-brand-whatsapp"></i> Enviar pedido por WhatsApp</button>
-            <button class="btn2 sm" id="cart-clear" style="width:100%;margin-top:8px">Vaciar carrito</button>
-            <button class="link-wa" id="cart-cotiza"><i class="ti ti-brand-whatsapp"></i> ¿No encuentras algo? Cotiza por WhatsApp</button>
-            <div class="err" id="cart-err"></div>
+            <button type="button" class="btn" id="cart-send" style="width:100%"><i class="ti ti-brand-whatsapp"></i> Enviar pedido por WhatsApp</button>
+            <button type="button" class="btn2 sm" id="cart-clear" style="width:100%;margin-top:8px">Vaciar carrito</button>
+            <button type="button" class="link-wa" id="cart-cotiza"><i class="ti ti-brand-whatsapp"></i> ¿No encuentras algo? Cotiza por WhatsApp</button>
+            <div class="err" id="cart-err" role="alert" aria-live="polite"></div>
           </aside>
         </div>
         <div class="shop-cta">
@@ -48,14 +55,14 @@
             <h3>¿No encuentras lo que buscas?</h3>
             <p>Cotiza directamente con nosotros a través de WhatsApp.</p>
           </div>
-          <button class="btn" id="cta-cotiza"><i class="ti ti-brand-whatsapp"></i> Cotizar por WhatsApp</button>
+          <button type="button" class="btn" id="cta-cotiza"><i class="ti ti-brand-whatsapp"></i> Cotizar por WhatsApp</button>
         </div>
       </div>
     </section>
   </main>
 
   <div id="footer"></div>
-  <script src="js/data.js?v=5"></script>
-  <script src="js/main.js?v=5"></script>
+  <script src="js/data.js?v=20261114"></script>
+  <script src="js/main.js?v=20261114"></script>
 </body>
 </html>

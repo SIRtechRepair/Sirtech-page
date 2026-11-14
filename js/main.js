@@ -1,11 +1,10 @@
 const $ = (s, el = document) => el.querySelector(s);
 const $$ = (s, el = document) => [...el.querySelectorAll(s)];
 const cop = n => '$' + Math.round(n).toLocaleString('es-CO');
-const wa = msg => window.open(`https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(msg)}`, '_blank');
+const wa = msg => window.open(`https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener,noreferrer');
 const norm = s => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 const esAvanzado = (c, s) => s[2] && !c.todoAvanzado;
 const AV = '<span class="av">Avanzado</span>';
-const contar = c => c.g.reduce((a, g) => a + g.s.length, 0);
 
 /* ---------- Encabezado ---------- */
 function renderHeader() {
@@ -19,18 +18,26 @@ function renderHeader() {
   $('#header').outerHTML = `
   <header class="site-header">
     <nav class="container nav">
-      <a href="index.html" class="logo"><img src="favicon_io/android-chrome-192x192.png" alt="Logo SIR·TECH"><span>SIR<b>·</b>TECH</span></a>
-      <button class="burger" aria-label="Abrir menú"><i class="ti ti-menu-2"></i></button>
-      <div class="menu">
+      <a href="index.html" class="logo"><img src="favicon_io/android-chrome-192x192.png" alt="Logo SIR·TECH" width="44" height="44"><span>SIR<b>·</b>TECH</span></a>
+      <button type="button" class="burger" aria-label="Abrir menú" aria-expanded="false" aria-controls="nav-menu"><i class="ti ti-menu-2"></i></button>
+      <div class="menu" id="nav-menu">
         ${links.map(([href, txt, id]) => `<a href="${href}" data-nav="${id}" class="${id === page ? 'act' : ''}">${txt}</a>`).join('')}
         <a href="tienda.html" class="cart-link" aria-label="Carrito"><i class="ti ti-shopping-cart"></i><span class="badge" id="badge"></span></a>
       </div>
     </nav>
   </header>`;
-  $('.burger').addEventListener('click', () => {
-    const open = $('.menu').classList.toggle('open');
+  const burger = $('.burger'), menu = $('.menu');
+  const closeMenu = () => {
+    menu.classList.remove('open');
+    burger.setAttribute('aria-expanded', 'false');
+    $('.burger i').className = 'ti ti-menu-2';
+  };
+  burger.addEventListener('click', () => {
+    const open = menu.classList.toggle('open');
+    burger.setAttribute('aria-expanded', String(open));
     $('.burger i').className = open ? 'ti ti-x' : 'ti ti-menu-2';
   });
+  $$('.menu a').forEach(a => a.addEventListener('click', closeMenu));
 
   if (page === 'inicio' && 'IntersectionObserver' in window) {
     const enlaces = $$('.menu a[data-nav]');
@@ -49,20 +56,24 @@ function renderHeader() {
 
 /* ---------- Pie de página ---------- */
 function renderFooter() {
+  const redes = [
+    ['https://wa.me/' + CONFIG.whatsapp, 'WhatsApp', 'ti-brand-whatsapp'],
+    [CONFIG.redes && CONFIG.redes.tiktok, 'TikTok', 'ti-brand-tiktok'],
+    [CONFIG.redes && CONFIG.redes.instagram, 'Instagram', 'ti-brand-instagram'],
+    [CONFIG.redes && CONFIG.redes.facebook, 'Facebook', 'ti-brand-facebook']
+  ].filter(([url]) => url && url !== '#');
   $('#footer').outerHTML = `
   <section class="cta">
     <div class="container">
       <div><h3>¿Te dijeron que no tenía arreglo?</h3><div>Tráelo. Diagnóstico sin costo.</div></div>
-      <button class="btn" id="cta-wa"><i class="ti ti-brand-whatsapp"></i> Escribir ahora</button>
+      <button type="button" class="btn" id="cta-wa"><i class="ti ti-brand-whatsapp"></i> Escribir ahora</button>
     </div>
   </section>
   <footer class="site-footer">
     <div class="container">
       <div class="muted">© ${new Date().getFullYear()} SIR·TECH · ${CONFIG.direccion}, ${CONFIG.ciudad} · <a href="garantia.html">Términos y condiciones</a></div>
       <div class="social">
-        <a href="${CONFIG.redes.instagram}" target="_blank" rel="noopener" aria-label="Instagram"><i class="ti ti-brand-instagram"></i></a>
-        <a href="${CONFIG.redes.tiktok}" target="_blank" rel="noopener" aria-label="TikTok"><i class="ti ti-brand-tiktok"></i></a>
-        <a href="${CONFIG.redes.facebook}" target="_blank" rel="noopener" aria-label="Facebook"><i class="ti ti-brand-facebook"></i></a>
+        ${redes.map(([url, label, ico]) => `<a href="${url}" target="_blank" rel="noopener" aria-label="${label}"><i class="ti ${ico}"></i></a>`).join('')}
       </div>
     </div>
   </footer>`;
@@ -71,8 +82,25 @@ function renderFooter() {
 
 /* ---------- Carrito (se guarda entre páginas) ---------- */
 const CART_KEY = 'sirtech-carrito';
-const getCart = () => { try { return JSON.parse(localStorage.getItem(CART_KEY)) || {}; } catch { return {}; } };
-const saveCart = c => { localStorage.setItem(CART_KEY, JSON.stringify(c)); updateBadge(); };
+const validProd = n => typeof PRODUCTOS !== 'undefined' && PRODUCTOS.some(p => p.n === n);
+const getCart = () => {
+  try {
+    const raw = JSON.parse(localStorage.getItem(CART_KEY));
+    if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return {};
+    const clean = {};
+    Object.entries(raw).forEach(([k, v]) => {
+      const q = Math.floor(Number(v));
+      if (q > 0 && validProd(k)) clean[k] = q;
+    });
+    return clean;
+  } catch (e) {
+    return {};
+  }
+};
+const saveCart = c => {
+  try { localStorage.setItem(CART_KEY, JSON.stringify(c)); } catch (e) {}
+  updateBadge();
+};
 function updateBadge() {
   const n = Object.values(getCart()).reduce((a, b) => a + b, 0);
   const b = $('#badge');
@@ -121,25 +149,29 @@ function initSelector() {
       <div id="list"></div>
       <div class="direct">
         <div class="direct-t"><i class="ti ti-message-circle-bolt"></i><span class="hd">¿No sabes qué tiene tu equipo?</span></div>
-        <textarea id="msg" class="fld" rows="2" placeholder="Mi celular se cayó y la pantalla quedó negra"></textarea>
+        <textarea id="msg" class="fld" rows="2" placeholder="Mi celular se cayó y la pantalla quedó negra" aria-label="Describe qué le pasa a tu equipo"></textarea>
         <small class="muted">Opcional. No tienes que marcar ningún servicio, con contarnos basta.</small>
       </div>
       <div class="panel-foot">
         <div id="st"></div>
-        <div class="row"><button class="btn2 sm" id="clr" hidden>Limpiar</button><button class="btn" id="cot"></button></div>
+        <div class="row"><button type="button" class="btn2 sm" id="clr" hidden>Limpiar</button><button type="button" class="btn" id="cot"></button></div>
       </div>
     </div>`;
 
-  $('#devs').innerHTML = SERVICIOS.map(c => `<button class="dev" data-k="${c.k}"><i class="ti ${c.i}"></i>${c.n}</button>`).join('');
+  $('#devs').innerHTML = SERVICIOS.map(c => `<button type="button" class="dev" data-k="${c.k}"><i class="ti ${c.i}"></i>${c.n}</button>`).join('');
 
   const item = (c, s, mostrarCat) => {
     const on = sel.has(s[0]);
-    return `<div class="sv ${on ? 'sel' : ''}" data-n="${s[0]}"><span class="bx">${on ? '✓' : ''}</span><div><div class="sn">${s[0]}${esAvanzado(c, s) ? AV : ''}</div><div class="sd">${s[1]}${mostrarCat ? ` · <span class="sd-cat">${c.n}</span>` : ''}</div></div></div>`;
+    return `<div class="sv ${on ? 'sel' : ''}" role="checkbox" tabindex="0" aria-checked="${on}" data-n="${s[0]}"><span class="bx" aria-hidden="true">${on ? '✓' : ''}</span><div><div class="sn">${s[0]}${esAvanzado(c, s) ? AV : ''}</div><div class="sd">${s[1]}${mostrarCat ? ` · <span class="sd-cat">${c.n}</span>` : ''}</div></div></div>`;
   };
 
   function render() {
     const q = norm($('#q').value.trim());
-    $$('.dev').forEach(d => d.classList.toggle('on', !q && d.dataset.k === cur));
+    $$('.dev').forEach(d => {
+      const on = !q && d.dataset.k === cur;
+      d.classList.toggle('on', on);
+      d.setAttribute('aria-pressed', String(on));
+    });
     if (q) {
       const res = [];
       SERVICIOS.forEach(c => c.g.forEach(g => g.s.forEach(s => {
@@ -180,38 +212,19 @@ function initSelector() {
       wa(t);
     }
   });
+  root.addEventListener('keydown', e => {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    const r = e.target.closest('.sv');
+    if (!r) return;
+    e.preventDefault();
+    const n = r.dataset.n;
+    sel.has(n) ? sel.delete(n) : sel.add(n);
+    render();
+    const next = $$('.sv', root).find(el => el.dataset.n === n);
+    if (next) next.focus();
+  });
   $('#q').addEventListener('input', render);
   render();
-}
-
-/* ---------- Página de servicios ---------- */
-function initServicios() {
-  const el = $('#lista-servicios');
-  if (!el) return;
-  const saltos = $('#saltos');
-  if (saltos) saltos.innerHTML = SERVICIOS.map(c => `<a class="chip" href="#${c.k}"><i class="ti ${c.i}"></i>${c.n}</a>`).join('');
-
-  el.innerHTML = SERVICIOS.map(c => `
-    <article class="card cat reveal" id="${c.k}">
-      <div class="cat-top">
-        <div class="cat-ico"><i class="ti ${c.i}"></i></div>
-        <div><h3>${c.n}</h3><div class="muted">${c.d}</div></div>
-        <div class="cat-info"><span class="chip">${contar(c)} servicios</span><span class="chip"><i class="ti ti-clock"></i> ${c.t}</span></div>
-      </div>
-      <div class="groups">
-        ${c.g.map(g => `
-          <div class="grp">
-            <div class="gh"><i class="ti ${g.i}"></i>${g.n}</div>
-            ${g.s.map(s => `<div class="it"><div class="sn">${s[0]}${esAvanzado(c, s) ? AV : ''}</div><div class="sd">${s[1]}</div></div>`).join('')}
-          </div>`).join('')}
-      </div>
-      <div class="cat-cta"><button class="btn" data-cat="${c.n}"><i class="ti ti-brand-whatsapp"></i> Cotizar ${c.n.toLowerCase()}</button></div>
-    </article>`).join('');
-
-  el.addEventListener('click', e => {
-    const b = e.target.closest('[data-cat]');
-    if (b) wa(`Hola SIR TECH, quiero cotizar un servicio de ${b.dataset.cat}.`);
-  });
 }
 
 /* ---------- Tienda ---------- */
@@ -223,14 +236,14 @@ function initTienda() {
   const find = n => PRODUCTOS.find(x => x.n === n);
 
   function render() {
-    $('#cat-chips').innerHTML = cats.map(c => `<button class="chip ${c === cat ? 'on' : ''}" data-c="${c}">${c}</button>`).join('');
+    $('#cat-chips').innerHTML = cats.map(c => `<button type="button" class="chip ${c === cat ? 'on' : ''}" aria-pressed="${c === cat}" data-c="${c}">${c}</button>`).join('');
     $('#prods').innerHTML = PRODUCTOS.filter(p => cat === 'Todo' || p.c === cat).map(p => `
       <div class="prod">
         <div class="prod-img">${p.img ? `<img src="${p.img}" alt="${p.n}" width="600" height="600" loading="lazy" decoding="async">` : `<i class="ti ${p.i}"></i>`}${p.b ? `<span class="pro">${p.b}</span>` : ''}</div>
         <div class="prod-body">
           <small>${p.c}</small>
           <div class="prod-name">${p.n}</div>
-          <div class="prod-row"><span class="pz">${p.desde ? '<small class="desde">Desde</small> ' : ''}<span class="price">${cop(p.p)}</span></span><button class="add" data-add="${p.n}" aria-label="Agregar ${p.n}"><i class="ti ti-plus"></i></button></div>
+          <div class="prod-row"><span class="pz">${p.desde ? '<small class="desde">Desde</small> ' : ''}<span class="price">${cop(p.p)}</span></span><button type="button" class="add" data-add="${p.n}" aria-label="Agregar ${p.n}"><i class="ti ti-plus"></i></button></div>
         </div>
       </div>`).join('');
 
@@ -239,7 +252,7 @@ function initTienda() {
       const p = find(n);
       if (!p) return '';
       total += p.p * q;
-      return `<div class="ci"><div>${n}<br><small class="muted">${cop(p.p * q)}</small></div><button class="qb" data-dec="${n}" aria-label="Quitar uno">−</button><span>${q}</span><button class="qb" data-add="${n}" aria-label="Agregar uno">+</button></div>`;
+      return `<div class="ci"><div>${n}<br><small class="muted">${cop(p.p * q)}</small></div><button type="button" class="qb" data-dec="${n}" aria-label="Quitar uno">−</button><span>${q}</span><button type="button" class="qb" data-add="${n}" aria-label="Agregar uno">+</button></div>`;
     }).join('');
     $('#cart-items').innerHTML = items || '<p class="muted">Tu carrito está vacío. Agrega productos con el botón +</p>';
     $('#cart-total').textContent = cop(total);
@@ -324,7 +337,7 @@ function initResenas() {
       </div>
       <div class="r-stars">★★★★★</div>
       <p class="r-text clamp">${r.texto}</p>
-      <button class="r-more" hidden>Leer más</button>
+      <button type="button" class="r-more" hidden>Leer más</button>
     </div></div>`).join('');
 
   let pg = 0, timer;
@@ -338,7 +351,7 @@ function initResenas() {
     track.style.transform = `translateX(-${pg * 100}%)`;
     const dots = $('#res-dots');
     if (dots) dots.innerHTML = Array.from({ length: n }, (_, i) =>
-      `<button class="res-dot ${i === pg ? 'on' : ''}" data-i="${i}" aria-label="Página ${i + 1}"></button>`).join('');
+      `<button type="button" class="res-dot ${i === pg ? 'on' : ''}" data-i="${i}" aria-label="Página ${i + 1}"></button>`).join('');
   }
 
   function checkMore() {
@@ -395,7 +408,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const pasos = [
     renderHeader, renderFooter, updateBadge,
     () => $$('[data-cfg]').forEach(el => el.textContent = CONFIG[el.dataset.cfg]),
-    renderUbicacion, initSelector, initServicios, initTienda, initContacto, initResenas, initReveal
+    renderUbicacion, initSelector, initTienda, initContacto, initResenas, initReveal
   ];
   pasos.forEach(fn => {
     try { fn(); } catch (err) { console.error('Error en', fn.name || 'paso', err); }

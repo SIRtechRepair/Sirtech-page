@@ -11,7 +11,7 @@ const CONFIG = {
   mapaEmbed: 'https://maps.google.com/maps?q=SIRtech%2C%20Diagonal%201%20%230-32%2C%20Fundadores%2C%20Arauca&z=17&output=embed',
   horario: { 0: [], 1: [[9,19]], 2: [[9,19]], 3: [[9,19]], 4: [[9,19]], 5: [[9,19]], 6: [[9,14]] },
   horarioTexto: ['Lun a vie 9:00 a.m. – 7:00 p.m.', 'Sábados 9:00 a.m. – 2:00 p.m.'],
-  redes: { instagram: '#', tiktok: '#', facebook: '#' }
+  redes: { instagram: '', tiktok: 'https://www.tiktok.com/@sirtechrepair', facebook: '' }
 };
 
 /*
